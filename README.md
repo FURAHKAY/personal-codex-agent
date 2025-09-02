@@ -1,8 +1,3 @@
-Perfect — let’s draft your **README.md** so it ticks all Ubundi’s requirements.
-Here’s a full version you can drop in your repo:
-
----
-
 ````markdown
 # Personal Codex Agent
 
@@ -121,8 +116,6 @@ A short demo video will accompany submission. It will show:
 ## 👤 Author
 
 Furaha Kabeya
-DeepMind Scholar, MSc Machine Learning & AI @ Stellenbosch University
-
 ```
 
 ---
