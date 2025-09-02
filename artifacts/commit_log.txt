@@ -1,0 +1,21 @@
+Commit Log — AI vs Manual
+
+- ✅ Setup project folders → Suggested by AI, accepted with edits (added artifacts/ myself).
+- ✅ build_index.py → AI draft, I debugged Azure endpoint + fixed dotenv issues.
+- ✅ rag.py → AI draft, I modified chunk size + simplified retrieval logic.
+- ✅ app.py → AI scaffold, I customized prompts, ensured agent speaks in my tone.
+- ✅ requirements.txt → AI suggested libs, I verified versions & installed manually.
+- ✅ data/ files → Entirely manual (my CV, AboutMe.md, WorkStyle.txt, project READMEs).
+- ✅ artifacts/ → My idea, but drafted with AI’s help.
+- ✅ Debugging → Mostly manual (I tested, retried, reinstalled until errors resolved).
+
+Summary: AI helped accelerate coding, but I directed architecture, authored dataset, and debugged issues myself.
+Commit Log (AI vs Manual)
+
+- Project structure: AI suggested, but I decided to adapt it to Ubundi’s trial brief.
+- build_index.py: AI drafted code; I debugged environment handling and adapted it for Azure/OpenAI keys.
+- rag.py: AI wrote the initial retrieval function, but I customized the chunk size and logic to fit my dataset.
+- app.py: AI scaffolded Streamlit; I added custom query handling and tuned the prompts to reflect my own voice.
+- requirements.txt: AI suggested packages; I verified compatibility and pinned versions.
+- data/ folder: Entirely manual — I created AboutMe.md, WorkStyle.txt, and READMEs to represent my experience authentically.
+- artifacts/ folder: AI helped draft templates; I curated wording to show my actual process.

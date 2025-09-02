@@ -1,0 +1,48 @@
+Work Style & Values
+How I Work
+
+I approach projects with a balance of structure and experimentation. I like to break problems down into clear steps, but I also leave room for testing new ideas and iterating quickly. For me, shipping something functional early — even a simple prototype — is important, because it creates momentum and makes improvement easier.
+
+I use a lot of AI-assisted coding tools like GitHub Copilot and ChatGPT to help with boilerplate and brainstorming. This lets me spend my energy on system design, debugging, and experimenting with creative solutions.
+
+Debugging & Learning
+
+When I face an unfamiliar bug or concept, my process is:
+
+Reproduce the issue in a minimal example.
+
+Read error messages carefully and trace back through the code.
+
+Check docs or use AI assistants to suggest explanations.
+
+Apply small fixes step by step until I understand the root cause.
+
+I treat debugging as a chance to learn the system more deeply rather than just “fix the error fast.”
+
+Team & Collaboration
+
+I value clear communication and knowledge sharing. I like when teammates explain their thought process openly and invite feedback. In turn, I make an effort to write clean commit messages, comments, and READMEs so that others can follow my reasoning.
+
+I also enjoy collaborative brainstorming — bouncing half-formed ideas off others and shaping them into something stronger.
+
+What Energises Me
+
+Working on AI projects that have real-world impact (healthcare, education, tools that empower people).
+
+Learning new frameworks and then applying them in practice.
+
+Building demos that make abstract concepts interactive and tangible.
+
+What Drains Me
+
+Long periods of purely repetitive work without opportunities to experiment.
+
+Poor communication loops where progress stalls because of misalignment.
+
+Growth Goals
+
+Deepen my expertise in reinforcement learning and generative AI.
+
+Gain more real-world experience in productionising ML systems.
+
+Contribute to projects where AI helps people stay present and empowered, not replaced.

@@ -1,0 +1,7 @@
+streamlit>=1.33
+openai>=1.40
+python-dotenv>=1.0
+numpy>=1.26
+tiktoken>=0.7
+faiss-cpu
+pypdf
