@@ -55,6 +55,7 @@ cd personal-codex-agent
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+set -a; source .env; set +a  
 ```
 
 ### Environment variables
@@ -125,8 +126,8 @@ See the `artifacts/` folder for:
 
 ## Demo
 
-* **Deployed app**: \[Streamlit link here once deployed]
-* **Video walkthrough**: \[5-min screen recording link here]
+* **Deployed app**: https://codex-agent.streamlit.app/
+* **Video walkthrough**: \codex-agent.mp4
 
 ## 📊 Evaluation Mapping
 

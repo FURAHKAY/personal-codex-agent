@@ -1,10 +1,13 @@
 import os, json, pickle, faiss, numpy as np, streamlit as st
 from pathlib import Path
-from dotenv import load_dotenv
+import os
 from openai import OpenAI
 from prompts import SYSTEM_PROMPT, MODES
 
-load_dotenv()
+if os.path.exists(".env"):
+    from dotenv import load_dotenv
+    load_dotenv()
+
 
 # --- Config from .env (one source of truth) ---
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

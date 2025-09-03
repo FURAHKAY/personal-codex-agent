@@ -1,11 +1,13 @@
 import os, json, pickle, faiss, numpy as np
 from pathlib import Path
-from dotenv import load_dotenv
+import os
 from openai import OpenAI
 from rag import load_texts, chunk  # your existing helpers
 
 # --- Load config ---
-load_dotenv()
+if os.path.exists(".env"):
+    from dotenv import load_dotenv
+    load_dotenv()
 EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 assert OPENAI_API_KEY, "Missing OPENAI_API_KEY in .env"
