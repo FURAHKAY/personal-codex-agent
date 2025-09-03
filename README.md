@@ -127,7 +127,7 @@ See the `artifacts/` folder for:
 ## Demo
 
 * **Deployed app**: https://codex-agent.streamlit.app/
-* **Video walkthrough**: \codex-agent.mp4
+* **Video walkthrough**: codex-agent.mov
 
 ## 📊 Evaluation Mapping
 

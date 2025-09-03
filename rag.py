@@ -19,20 +19,7 @@ def load_texts(dirpath: str):
             except Exception as e:
                 print(f"[warn] Could not read {fp.name}: {e}")
 
-# def chunk(text: str, max_tokens: int = 400):
-#     """Basic chunking by paragraphs/lines (rough)."""
-#     text = re.sub(r"\n{3,}", "\n\n", text)
-#     parts = text.split("\n\n")
-#     buf, count = [], 0
-#     for part in parts:
-#         tokens = part.split()
-#         if count + len(tokens) > max_tokens and buf:
-#             yield " ".join(buf)
-#             buf, count = [], 0
-#         buf.append(part)
-#         count += len(tokens)
-#     if buf:
-#         yield " ".join(buf)
+
 def chunk(text: str, max_tokens: int = 350, overlap: int = 80):
     """Token-window chunking with overlap for better context recall."""
     toks = text.split()
