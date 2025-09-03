@@ -1,8 +1,8 @@
-# app.py
 import os, json, pickle, faiss, numpy as np, streamlit as st
 from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
+from prompts import SYSTEM_PROMPT, MODES
 
 load_dotenv()
 
@@ -61,116 +61,50 @@ def retrieve(query: str, k: int = 4):
         out.append({"rank": rank+1, "score": float(D[0][rank]), **records[idx]})
     return out
 
-def answer(query: str, ctx_text: str) -> str:
-    sys = (
-        "You are a helpful, honest assistant that answers questions about the candidate "
-        "based ONLY on the provided context. If unsure, say you don't know."
-    )
+def format_citations(ctx_items):
+    return " | ".join(f"[{c['doc_id']}#{c['rank']}]" for c in ctx_items)
+
+def answer(query: str, ctx_text: str, mode_instr: str = "") -> str:
+    sys = SYSTEM_PROMPT + ("\n\nMode instructions: " + mode_instr if mode_instr else "")
     msgs = [
         {"role": "system", "content": sys},
-        {"role": "user", "content": f"Context:\n{ctx_text}\n\nQuestion: {query}"},
+        {
+            "role": "user",
+            "content": f"Context:\n{ctx_text}\n\nQuestion: {query}\n\n"
+                       f"Instructions: Cite sources inline like [doc#rank] when appropriate."
+        },
     ]
     resp = client.chat.completions.create(model=CHAT_MODEL, messages=msgs)
     return resp.choices[0].message.content
+
 
 # --- UI ---
 st.set_page_config(page_title="Personal Codex Agent", page_icon="🗂️")
 st.title("Personal Codex Agent")
 st.caption(f"Embed model: `{EMBED_MODEL}` · Chat model: `{CHAT_MODEL}` · Chunks: {meta.get('count')}")
 
-query = st.text_input("Ask about me:", placeholder="e.g., What kind of engineer am I?")
+col1, col2 = st.columns([2,1])
+with col1:
+    query = st.text_input("Ask about me:", placeholder="e.g., What kind of engineer am I?")
+with col2:
+    mode = st.selectbox("Mode", options=list(MODES.keys()))
+k = st.slider("How many chunks to retrieve", min_value=2, max_value=8, value=4, step=1)
+
 if st.button("Ask") and query.strip():
     with st.spinner("Retrieving…"):
-        ctx_items = retrieve(query, k=4)
+        ctx_items = retrieve(query, k=k)
     if not ctx_items:
         st.warning("No relevant context found.")
     else:
-        ctx_text = "\n\n---\n\n".join(f"[{c['doc_id']}] {c['text']}" for c in ctx_items)
+        ctx_text = "\n\n---\n\n".join(f"[{c['doc_id']}#{c['rank']}] {c['text']}" for c in ctx_items)
+        mode_instr = MODES.get(mode, "")
         st.subheader("Answer")
         with st.spinner("Thinking…"):
-            out = answer(query, ctx_text)
+            out = answer(query, ctx_text, mode_instr=mode_instr)
         st.write(out)
+
+        st.caption("Sources: " + format_citations(ctx_items))
 
         with st.expander("View retrieved context"):
             for c in ctx_items:
-                st.markdown(f"**{c['rank']}. {c['doc_id']}**\n\n{c['text']}")
-
-# import os
-# import streamlit as st
-# from dotenv import load_dotenv
-# from prompts import INTERVIEW_STYLE, STORY_STYLE, FAST_FACTS_STYLE
-# from rag import top_k
-# from openai import OpenAI
-#
-# load_dotenv()
-#
-# use_azure = bool(os.getenv("AZURE_OPENAI_API_KEY"))
-# if use_azure:
-#     from openai import AzureOpenAI
-#     client = AzureOpenAI(
-#         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-#         api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
-#         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-#     )
-#     CHAT_MODEL = os.getenv("AZURE_OPENAI_DEPLOYMENT")
-#     EMBED_MODEL = os.getenv("AZURE_OPENAI_EMBED_DEPLOYMENT")
-# else:
-#     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-#     CHAT_MODEL = os.getenv("MODEL", "gpt-4o-mini")
-#     EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
-#
-# st.set_page_config(page_title="Furaha Codex", page_icon="✨")
-# st.title("Furaha — Personal Codex Agent")
-#
-# mode = st.selectbox("Answer style", ["Interview", "Story", "Fast Facts"])
-# use_rag = st.toggle("Use my documents (RAG)", value=True)
-#
-# style_map = {
-#     "Interview": INTERVIEW_STYLE,
-#     "Story": STORY_STYLE,
-#     "Fast Facts": FAST_FACTS_STYLE
-# }
-#
-# if "messages" not in st.session_state:
-#     st.session_state.messages = []
-#
-# for m in st.session_state.messages:
-#     with st.chat_message(m["role"]):
-#         st.markdown(m["content"])
-#
-# q = st.chat_input("Ask about me… (e.g., “What are your strongest skills?”)")
-# if q:
-#     st.session_state.messages.append({"role":"user","content":q})
-#
-#     # Build system prompt
-#     system = style_map[mode] + "\nOnly speak as me (Furaha). Keep answers truthful and grounded."
-#
-#     # Optional RAG
-#     rag_context = ""
-#     sources = []
-#     if use_rag:
-#         hits = top_k(q, k=4, client=client, embed_model=EMBED_MODEL, use_azure=use_azure)
-#         for h in hits:
-#             rag_context += f"\n[Source:{h['doc_id']}] {h['text']}"
-#             sources.append(h["doc_id"])
-#         system += "\n\nUse the following personal snippets if relevant:\n" + rag_context
-#
-#     with st.chat_message("assistant"):
-#         stream = client.chat.completions.create(
-#             model=CHAT_MODEL,
-#             messages=[
-#                 {"role":"system","content":system},
-#                 *st.session_state.messages
-#             ],
-#             stream=True
-#         )
-#         full=""
-#         for chunk in stream:
-#             delta = chunk.choices[0].delta.content or ""
-#             full += delta
-#             st.write(delta, end="")
-#
-#     st.session_state.messages.append({"role":"assistant","content":full})
-#
-#     if use_rag and sources:
-#         st.caption("Sources: " + ", ".join(sorted(set(sources))[:5]))
+                st.markdown(f"**{c['rank']}. {c['doc_id']}**  \nScore: `{c['score']:.4f}`\n\n{c['text']}")

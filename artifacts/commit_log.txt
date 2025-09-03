@@ -1,21 +1,48 @@
-Commit Log — AI vs Manual
+# Commit Log — AI vs Manual Contributions
 
-- ✅ Setup project folders → Suggested by AI, accepted with edits (added artifacts/ myself).
-- ✅ build_index.py → AI draft, I debugged Azure endpoint + fixed dotenv issues.
-- ✅ rag.py → AI draft, I modified chunk size + simplified retrieval logic.
-- ✅ app.py → AI scaffold, I customized prompts, ensured agent speaks in my tone.
-- ✅ requirements.txt → AI suggested libs, I verified versions & installed manually.
-- ✅ data/ files → Entirely manual (my CV, AboutMe.md, WorkStyle.txt, project READMEs).
-- ✅ artifacts/ → My idea, but drafted with AI’s help.
-- ✅ Debugging → Mostly manual (I tested, retried, reinstalled until errors resolved).
+This log documents which parts of the project were AI-assisted and which were written/edited manually.
 
-Summary: AI helped accelerate coding, but I directed architecture, authored dataset, and debugged issues myself.
-Commit Log (AI vs Manual)
+---
 
-- Project structure: AI suggested, but I decided to adapt it to Ubundi’s trial brief.
-- build_index.py: AI drafted code; I debugged environment handling and adapted it for Azure/OpenAI keys.
-- rag.py: AI wrote the initial retrieval function, but I customized the chunk size and logic to fit my dataset.
-- app.py: AI scaffolded Streamlit; I added custom query handling and tuned the prompts to reflect my own voice.
-- requirements.txt: AI suggested packages; I verified compatibility and pinned versions.
-- data/ folder: Entirely manual — I created AboutMe.md, WorkStyle.txt, and READMEs to represent my experience authentically.
-- artifacts/ folder: AI helped draft templates; I curated wording to show my actual process.
+## Initial Setup
+- Manual: Created virtual environment, installed dependencies (`requirements.txt`).
+- Manual: Added `.env` with API keys.
+
+---
+
+## Core Code Files
+
+### rag.py
+- AI: Drafted initial `load_texts` and `chunk` functions.
+- Manual: Rewrote chunking with overlap strategy, tested on real docs, ensured robustness for long paragraphs.
+
+### prompt.py
+- AI: Suggested base `SYSTEM_PROMPT` structure.
+- Manual: Refined wording into my authentic tone, ensuring answers stayed grounded and reflective of me.
+
+### build_index.py
+- AI: Scaffolded embedding loop, FAISS index creation, and persistence of metadata.
+- Manual: Added error handling for empty data folder, validated batch embeddings, ensured reproducibility.
+
+### app.py
+- AI: Provided Streamlit scaffolding, retrieval helpers, and chat flow.
+- Manual: Customized UI labels, improved error messaging, added context expander, refined answer style to keep “my voice.”
+
+---
+
+## Artifacts
+- AI: Helped outline artifact structure (`prompts_used.md`, `agent_instructions.md`, `commit_log.txt`).
+- Manual: Populated with real examples, annotated AI prompts vs. my edits, added reflections on workflow.
+
+---
+
+## Deployment Prep
+- Manual: GitHub setup, secret handling (.env ignored).
+- Manual: Planning Streamlit Cloud deployment.
+
+---
+
+## Summary
+- Roughly **60% AI-assisted scaffolding**, **40% manual edits, curation, and refinement**.
+- AI accelerated the boilerplate and structure.
+- My manual input shaped the dataset, ensured correctness, polished the voice, and added reflection — making the agent feel personal and representative of me.

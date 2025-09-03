@@ -1,4 +1,3 @@
-````markdown
 # Personal Codex Agent
 
 ## 📌 Overview
@@ -7,17 +6,50 @@ It is powered by my personal documents (CV, project READMEs, and reflective note
 
 The system uses **retrieval-augmented generation (RAG)** with OpenAI embeddings + FAISS to ground answers in my data, then generates responses in my own voice.
 
----
+## Features
+- **Retrieval-Augmented Generation (RAG)** with FAISS + OpenAI embeddings
+- **Personal dataset** (`/data/`) including CV, AboutMe, work style notes, and project READMEs
+- **Streamlit UI** for interactive Q&A
+- **Citations**: see which documents/chunks were used
+- **Agentic modes** (optional stretch): interview / storytelling / fast facts / humble-brag
 
-## ⚙️ Setup
 
-### 1. Clone the repo
+## Project Structure
+```
+personal-codex-agent/
+│
+├── app.py              # Streamlit UI
+├── build\_index.py      # Splits docs into chunks -> Build embeddings -> stores in FAISS index. 
+├── rag.py              #  Finds top-k relevant chunks for a query.
+├── prompt.py           # System prompt definition
+│
+├── data/               # My personal documents
+│   ├── Furaha kabeya-ML-CV.pdf
+│   ├── AboutMe.md
+│   ├── WorkStyle.txt
+│   ├── README\_DiabetesPredictor.md
+│   └── README\_RL\_Agent.md
+│
+├── index/              # Generated FAISS index + metadata
+│
+├── artifacts/          # "Show Your Thinking" AI build logs
+│   ├── prompts\_used.md
+│   ├── agent\_instructions.md
+│   └── commit\_log.txt
+│
+├── requirements.txt
+└── README.md
+
+````
+## Setup
+
+### Clone the repo
 ```bash
-git clone https://github.com/<your-username>/personal-codex-agent.git
+git clone git@github.com:FURAHKAY/personal-codex-agent.git
 cd personal-codex-agent
 ````
 
-### 2. Create virtual environment
+### Create virtual environment
 
 ```bash
 python3 -m venv .venv
@@ -25,27 +57,24 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Environment variables
+### Environment variables
 
-Create a `.env` file in the project root:
+`.env` file in the project root:
 
 ```env
 OPENAI_API_KEY=your_openai_key_here
-# or Azure
-AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
-AZURE_OPENAI_API_KEY=your_azure_key
-AZURE_OPENAI_API_VERSION=2024-06-01
-AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini-v1
-AZURE_OPENAI_EMBED_DEPLOYMENT=text-embedding-3-small
+MODEL=gpt-4o-mini
+EMBED_MODEL=text-embedding-3-small
+
 ```
 
-### 4. Build the index
+### Build the index
 
 ```bash
 python build_index.py
 ```
 
-### 5. Run the app
+### Run the app
 
 ```bash
 streamlit run app.py
@@ -53,17 +82,16 @@ streamlit run app.py
 
 ---
 
-## 🏗️ System Design
+## Design Choices
 
-* **Data layer (`data/`)**: My CV and supporting documents (project READMEs, personal notes).
-* **Indexing (`build_index.py`)**: Splits docs into chunks → embeds → stores in FAISS index.
-* **Retriever (`rag.py`)**: Finds top-k relevant chunks for a query.
-* **Chat interface (`app.py`)**: Streamlit UI where users can ask questions.
-* **Artifacts (`artifacts/`)**: AI prompts, agent instructions, and commit notes to show my process.
+* **RAG (FAISS + OpenAI embeddings)** → ensures answers are grounded in my actual documents.
+* **Chunking with overlap** → balances recall vs relevance.
+* **Streamlit** → quick, interactive UI.
+* **Temperature = 0** → deterministic answers for consistency.
+* **Personal dataset** → blends technical + reflective docs so answers feel authentic.
 
----
 
-## 🎯 Example Questions
+## Example Questions
 
 Here are some queries the agent can answer:
 
@@ -75,52 +103,43 @@ Here are some queries the agent can answer:
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 Given more time, I would:
 
-* Add **modes** (e.g., Interview mode vs Storytelling mode).
-* Extend the dataset automatically (upload new docs on the fly).
 * Improve grounding with richer metadata and cross-document linking.
-* Deploy on **Vercel** or **Replit** with a public demo URL.
+* Incremental indexing (upload new docs from UI).
+* Fine-grained metadata filtering (e.g., “only from CV”).
+* Add **self-reflective agent mode** for growth/values questions.
 
----
 
-## 🧠 Show Your Thinking
+
+## Show Your Thinking
 
 See the `artifacts/` folder for:
 
 * Prompts I used with AI coding agents.
 * How I guided sub-agents (tasks delegated, rules given).
 * Notes on what was AI-generated vs hand-edited.
-
 ---
 
-## 🚀 Deployment
+## Demo
 
-* Local: via `streamlit run app.py`
-* Cloud: (to be updated after deployment to Streamlit Cloud)
+* **Deployed app**: \[Streamlit link here once deployed]
+* **Video walkthrough**: \[5-min screen recording link here]
 
----
+## 📊 Evaluation Mapping
 
-## 🎥 Walkthrough Video
-
-A short demo video will accompany submission. It will show:
-
-* Project structure + README
-* Live Q\&A with the agent
-* Artifacts folder
+* **Context handling** → FAISS + overlap, retrieved snippets shown
+* **Agentic thinking** → modes scaffolded, expandable
+* **Personal data** → CV + project READMEs + reflective notes
+* **Build quality** → index checks, robust error handling
+* **Voice & reflection** → first-person answers, grounded in my docs
+* **Bonus effort** → citations, mode design, artifacts folder
+* **AI build artifacts** → included in `/artifacts/`
+* **RAG usage** → effective FAISS + OpenAI embedding pipeline
 
 ---
 
 ## 👤 Author
-
 Furaha Kabeya
-```
-
----
-
-✅ This README covers: **setup, design choices, examples, improvements, artifacts, and video** — exactly what Ubundi asked.  
-
-Do you want me to also **auto-draft the artifacts files** (`prompts_used.md`, `agent_instructions.md`, `commit_log.txt`) based on our chat so you can just drop them in?
-```

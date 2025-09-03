@@ -1,39 +1,76 @@
-# Prompts Used (Sample)
+# Prompts Used
 
-These are a few representative prompts I used with ChatGPT while building the project.  
-They show how I collaborated with AI tools, not every single interaction.
-
----
-
-**Prompt → Response → My Action**
-
-**Prompt:**  
-"How do I structure a personal codex project that uses RAG and Streamlit?"  
-
-**AI Response:**  
-Suggested a folder layout (`app.py`, `rag.py`, `build_index.py`, `data/`, `index/`) with FAISS for embeddings.  
-
-**My Action:**  
-I adopted the suggested structure but added my own `artifacts/` folder to track build notes, since Ubundi required “show your thinking”.
+This file captures some of the key prompts I used with AI assistants while building the Personal Codex Agent.  
+It also shows how I edited the AI output to make it fit the project.
 
 ---
 
-**Prompt:**  
-"I’m getting a dotenv error. Why is `OPENAI_API_KEY` not loading?"  
+## Example 1: RAG Helper (rag.py)
 
-**AI Response:**  
-Told me to check if `.env` was inside the venv or system-wide, and suggested reinstalling `python-dotenv`.  
+**Prompt I gave AI:**
+> "Write a Python function to chunk text into overlapping windows of tokens, max length 350, overlap 80."
 
-**My Action:**  
-Manually reinstalled `python-dotenv` inside my venv and confirmed it worked by testing with `os.getenv`.
+**AI’s Response (snippet):**
+```python
+def chunk(text: str, max_tokens: int = 350, overlap: int = 80):
+    toks = text.split()
+    i = 0
+    while i < len(toks):
+        window = toks[i:i+max_tokens]
+        yield " ".join(window)
+        if i + max_tokens >= len(toks):
+            break
+        i += max_tokens - overlap
+````
+
+**My Edit:**
+
+* Integrated this into `rag.py` together with my own `load_texts` function.
+* Adjusted defaults (sometimes 400 tokens, sometimes 350) depending on test runs.
+* Added PDF + text file loader logic manually.
 
 ---
 
-**Prompt:**  
-"Why is FAISS giving `assert d == self.d` error?"  
+## Example 2: System Prompt (prompt.py)
 
-**AI Response:**  
-Explained that query embedding dimension didn’t match the index. Suggested rebuilding the index with the same embedding model.  
+**Prompt I gave AI:**
 
-**My Action:**  
-Rebuilt the FAISS index after correcting `AZURE_OPENAI_EMBED_DEPLOYMENT`, and confirmed that embeddings matched.
+> "Write me a system prompt that makes the agent answer only about my personal background, skills, and style."
+
+**AI’s Response:**
+
+```python
+SYSTEM_PROMPT = """You are the personal codex of the user. 
+Answer questions about the user's background, projects, skills, values and working style.
+Use retrieved snippets when relevant. Keep answers grounded, concise, and in the user's voice."""
+```
+
+**My Edit:**
+
+* Shortened phrasing for clarity.
+* Considered adding “if unsure, say you don’t know” (but later moved that into app.py).
+
+---
+
+## Example 3: Streamlit UI (app.py)
+
+**Prompt I gave AI:**
+
+> "Build a simple Streamlit interface to query FAISS and call an OpenAI chat model."
+
+**AI’s Response (snippet):**
+
+```python
+st.title("Personal Codex Agent")
+query = st.text_input("Ask about me:")
+if st.button("Ask"):
+    ctx_items = retrieve(query, k=4)
+    ...
+```
+
+**My Edit:**
+
+* Added `st.expander` to show retrieved context.
+* Added captions with model names (`Embed model: ..., Chat model: ...`).
+* Added error checks for model mismatch and embedding dimensions.
+
