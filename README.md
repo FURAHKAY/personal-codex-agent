@@ -127,9 +127,9 @@ See the `artifacts/` folder for:
 ## Demo
 
 * **Deployed app**: https://codex-agent.streamlit.app/
-* **Video walkthrough**: codex-agent.mov
+* **Video walkthrough**: https://drive.google.com/file/d/1yA68q3XZ-2JHP4AjI0BoO9zUOmTpt7Cq/view
 
-## 📊 Evaluation Mapping
+## Evaluation Mapping
 
 * **Context handling** → FAISS + overlap, retrieved snippets shown
 * **Agentic thinking** → modes scaffolded, expandable
@@ -142,5 +142,5 @@ See the `artifacts/` folder for:
 
 ---
 
-## 👤 Author
+## Author
 Furaha Kabeya
