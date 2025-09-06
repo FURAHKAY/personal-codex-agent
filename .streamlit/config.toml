@@ -1,0 +1,15 @@
+# .streamlit/config.toml
+[theme]
+base="light"              # "light" or "dark"
+primaryColor="#4F46E5"    # indigo-600
+backgroundColor="#FFFFFF"
+secondaryBackgroundColor="#F3F4F6"  # gray-100
+textColor="#111827"       # gray-900
+font="sans serif"
+
+[client]
+showErrorDetails = "full"   # helpful while iterating
+
+[server]
+headless = true
+enableCORS = true

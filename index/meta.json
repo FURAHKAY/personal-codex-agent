@@ -1,5 +1,8 @@
 {
   "embed_model": "text-embedding-3-small",
   "dim": 1536,
-  "count": 7
+  "count": 7,
+  "data_dir": "data",
+  "overlap": 80,
+  "max_tokens": 350
 }
