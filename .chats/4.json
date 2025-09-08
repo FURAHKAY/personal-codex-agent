@@ -1,0 +1,64 @@
+{
+  "title": "Tell me a short story about a project…",
+  "history": [
+    {
+      "q": "Tell me a short story about a project you’re proud of.",
+      "a": "One project I'm particularly proud of is the Diabetes-Predictive-Healthcare-Model. It began as a quest to harness the power of neural networks to tackle a pressing health issue: diabetes. By diving into the Pima Diabetes dataset, I crafted a model that predicts the likelihood of diabetes using critical features like glucose levels and BMI. I remember the first time I saw the model's predictions align closely with real patient outcomes; it felt like a small victory not just for me, but for future patients who might receive earlier diagnoses and preventative care.\n\nReflecting on this project, I realize how technology can bridge the gap between data and meaningful health decisions. This experience reinforced my belief in predictive analytics as a pivotal tool in healthcare. It’s a reminder that every line of code has the potential to change lives, guiding patients and doctors toward informed decisions that can lead to healthier futures. This reinforced my belief in building carefully while iterating quickly.",
+      "mode": "Storytelling",
+      "ctx": [
+        {
+          "rank": 1,
+          "score": 1.7174739837646484,
+          "doc_id": "README_DiabetesPredictor.md",
+          "type": "project",
+          "text": "# Diabetes-Predictive-Healthcare-Model\nThis project implements a neural network-based classifier to predict the likelihood of diabetes using patient medical records. \n----\nThis project uses the Pima Diabetes dataset to train a predictive model that forecasts the likelihood of diabetes in patients based on features such as:\n- Glucose level\n- Blood pressure\n- BMI\n- Insulin levels\n- Age\n- Diabetes pedigree function\n- Skin thickness\n- Number of pregnancies It simulates how predictive analytics can aid in early diagnosis and preventive healthcare decisions."
+        },
+        {
+          "rank": 2,
+          "score": 1.7315332889556885,
+          "doc_id": "README_RL_Agent.md",
+          "type": "project",
+          "text": "# RL GridWorld Agent ## Overview This project explores reinforcement learning (RL) through two approaches: 1. **Q-Learning Agent** – a tabular RL algorithm that learns action–value functions directly.\n2. **Transformer-based RL Agent** – an experimental approach that uses sequence modelling (Transformer encoder) to approximate Q-values. Both agents are trained in a simple **GridWorld environment**, where the task is to move from a start position to a goal while maximizing reward. --- ## Environment * **GridWorld**: a 5×5 grid with a fixed start state and a goal state.\n* **Actions**: up, down, left, right.\n* **Rewards**: * `+1` for reaching the goal.\n * `-0.1` penalty for each step (to encourage efficiency). --- ## Agents ### Q-Learning Agent * Maintains a **Q-table** with state–action values.\n* Uses an **ε-greedy policy** for exploration.\n* Updates Q-values using the TD target: $$\n Q(s,a) \\leftarrow Q(s,a) + \\alpha \\Big(r + \\gamma \\max_{a'} Q(s',a') - Q(s,a)\\Big)\n $$\n* Provides a baseline to compare against more complex agents. ### Transformer RL Agent * Uses an **embedding layer** to represent states.\n* Adds **positional encoding** to capture order in state sequences.\n* A **Transformer encoder** processes the sequence.\n* A **linear head** predicts Q-values for available actions.\n* Shows how sequence models can generalize beyond tabular Q-learning. --- ## Results * **Q-Learning** converges steadily, showing increasing total rewards across episodes.\n* **Transformer RL Agent** learns slower but demonstrates the potential of sequence-based models in RL.\n* Training curves are saved in the `plots/` folder: * `q_learning_reward_curve.png`\n * `transformer_rl_reward_curve.png` --- ## Tech Stack * **Python**\n* **NumPy** (Q-Learning implementation)\n* **PyTorch** (Transformer RL agent)\n* **Matplotlib** (plots) --- ## How to Run 1. **Q-Learning Agent** ```bash\n python train_q_learning.py\n ``` 2. **Transformer RL Agent** ```bash\n python train_transformer_rl.py\n ``` Plots will be saved in the `plots/` directory. --- ## Future Work * Extend GridWorld to larger or more complex environments.\n* Compare with policy-gradient methods.\n* Experiment with attention-based replay buffers."
+        }
+      ],
+      "ts": 1757328447.9037702
+    },
+    {
+      "q": "anything else",
+      "a": "I don’t have enough context to answer confidently. It would be helpful to include specific projects or experiences you'd like me to reflect on, or any particular themes or accomplishments you want highlighted in the story. Please add that to /data/.",
+      "mode": "Storytelling",
+      "ctx": [
+        {
+          "rank": 1,
+          "score": 1.6372357606887817,
+          "doc_id": "Furaha kabeya-ML-CV.pdf",
+          "type": "cv",
+          "text": "furahakabeya.fk@gmail.com LinkedIn | Github"
+        },
+        {
+          "rank": 2,
+          "score": 1.6533430814743042,
+          "doc_id": "WorkStyle.txt",
+          "type": "any",
+          "text": "Work Style & Values\nHow I Work I approach projects with a balance of structure and experimentation. I like to break problems down into clear steps, but I also leave room for testing new ideas and iterating quickly. For me, shipping something functional early — even a simple prototype — is important, because it creates momentum and makes improvement easier. I use a lot of AI-assisted coding tools like GitHub Copilot and ChatGPT to help with boilerplate and brainstorming. This lets me spend my energy on system design, debugging, and experimenting with creative solutions. Debugging & Learning When I face an unfamiliar bug or concept, my process is: Reproduce the issue in a minimal example. Read error messages carefully and trace back through the code. Check docs or use AI assistants to suggest explanations. Apply small fixes step by step until I understand the root cause. I treat debugging as a chance to learn the system more deeply rather than just “fix the error fast.” Team & Collaboration I value clear communication and knowledge sharing. I like when teammates explain their thought process openly and invite feedback. In turn, I make an effort to write clean commit messages, comments, and READMEs so that others can follow my reasoning. I also enjoy collaborative brainstorming — bouncing half-formed ideas off others and shaping them into something stronger. What Energises Me Working on AI projects that have real-world impact (healthcare, education, tools that empower people). Learning new frameworks and then applying them in practice. Building demos that make abstract concepts interactive and tangible. What Drains Me Long periods of purely repetitive work without opportunities to experiment. Poor communication loops where progress stalls because of misalignment. Growth Goals Deepen my expertise in reinforcement learning and generative AI. Gain more real-world experience in productionising ML systems. Contribute to projects where AI helps people stay present and empowered, not replaced."
+        },
+        {
+          "rank": 3,
+          "score": 1.654106616973877,
+          "doc_id": "Furaha kabeya-ML-CV.pdf",
+          "type": "cv",
+          "text": "scalable solutions and automate infrastructure management. • Implemented Security Protocols and Conducted Usability Testing. PERSONAL PROJECTS • Naive Bayes Spam Classifier (Python) Implemented Naive Bayes from scratch to classify SMS/email messages. • Diabetes Predictive Healthcare Model (Python) Built and trained a neural network to predict diabetes from patient medical data. • Sorting Algorithm Analyzer (Python) Built a program to analyze and visualize sorting algorithm performance, including: o Merge Sort o Quicksort o Bubble Sort o Selection Sort o Insertion Sort • Maze Solver with BFS/DFS (Python) Designed a maze generator and implemented BFS/DFS to auto-solve paths. REFERENCES AVAILABLE UPON REQUEST COMPUTER SCIENCE INTERN • DEC 2021 – FEB 2022 Quantify Your Future | Remote (South Africa) • Collected, analyzed, and interpreted large datasets for major banks (ABSA, FNB, Nedbank) to improve products. • Used Python for data analysis and visualization, contributing to faster insights. RESEARCH & ACADEMIC PROJECTS HONOURS RESEARCH PROJECT – AI FOR FORESTRY ENGINEER • JUN 2024 – NOV 2024 Stellenbosch University | Stellenbosch, South Africa • Title: The Signal and the Noise: Using AI Techniques to Find Patterns in Variation in Daily Stem Growth Data and Environmental Data in Eucalypts. • Developed machine learning models (LSTM, Random Forest, XGBoost) to predict tree stem growth using environmental data (temperature, soil moisture, VPD). • Applied time-series analysis, feature engineering, and imputation techniques to handle missing dendrometer data. • Evaluated models using MAE, RMSE, R², MAPE, and MBE, achieving high accuracy in predicting growth trends. • Compared AI models with traditional linear regression, demonstrating ML superiority in time-series forecasting. STUDENT PROJECT – MOBILE APP FOR BARTER SYSTEM • FEB 2022 – NOV 2022 University of the Witwatersrand | Johannesburg, South Africa • Developed a React Native application that enables users to swap items instead of purchasing. • Integrated a real-time chat system to facilitate secure communication between users. • Designed an intuitive UI/UX for accessibility, making item exchange seamless."
+        },
+        {
+          "rank": 4,
+          "score": 1.6642577648162842,
+          "doc_id": "AboutMe.md",
+          "type": "about",
+          "text": "# About Me Hi, I’m **Furaha Kabeya** — a Machine Learning & AI MSc student at Stellenbosch University and a Google DeepMind Scholar. My academic journey started with a **BSc in Computer Science** and a **BSc (Hons) in Bioinformatics**, and I’m now focusing on advanced topics in **reinforcement learning, probabilistic modelling, and generative AI**. I enjoy working at the intersection of **research and practical engineering** — building systems that are not just theoretical but can be deployed and tested in the real world. My projects so far include a **Diabetes Predictor (healthcare AI)**, a **Spam Classifier (Bayesian NLP)**, and an **RL GridWorld Agent (Q-learning & Transformer variant)**. I often wrap these into simple apps or visualisations to make them more accessible and interactive. --- ## What drives me I am motivated by the idea of using AI to **solve meaningful problems** — especially in contexts like healthcare, education, and productivity. For me, the most exciting AI tools are those that help humans stay **present, powerful, and differentiated** rather than being replaced or diminished. --- ## My approach * **Learning**: I learn by breaking concepts into small, connected steps and experimenting with code.\n* **Building**: I like shipping prototypes quickly, then iterating based on results.\n* **Collaboration**: I value open communication and enjoy when ideas are tested and shaped as a team. --- ## Fun fact Outside of my studies and projects, I enjoy creative pursuits like **makeup artistry, journaling, and painting** — I find that creativity in one area often fuels problem-solving in another."
+        }
+      ],
+      "ts": 1757328514.835535
+    }
+  ],
+  "mode": "Storytelling"
+}
