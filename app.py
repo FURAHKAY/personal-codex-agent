@@ -413,94 +413,6 @@ def postprocess_by_mode(text: str, mode: str, query: str = "") -> str:
     # light cleanup only
     return t.replace("**", "").strip()
 
-# def postprocess_by_mode(text: str, mode: str, query: str = "") -> str:
-#     """
-#     Normalize the model output per mode for consistent, polished UX.
-#     `query` is used to craft a natural intro line (esp. Fast Facts / Reflective).
-#     """
-#     t = (text or "").strip()
-#     if not t:
-#         return t
-#
-#     import re
-#
-#     t = re.sub(r"\*\*(.*?)\*\*", r"\1", t)
-#
-#     def _sentences(s: str):
-#         return [x.strip() for x in re.split(r"(?<=[.!?])\s+", s) if x.strip()]
-#
-#     # ---------- FAST FACTS ----------
-#     if mode == "Fast Facts":
-#         # use existing bullets if present; otherwise split sentences
-#         raw_lines = [ln.strip() for ln in t.split("\n") if ln.strip()]
-#         bullets = [re.sub(r"^[\-\•\–]\s*", "", ln) for ln in raw_lines
-#                    if ln.lstrip().startswith(("-", "•", "–"))]
-#         if not bullets:
-#             bullets = _sentences(t)
-#
-#         # clean: strip stray bold markers & trim to 6
-#         bullets = [re.sub(r"\*\*(.*?)\*\*", r"\1", b).strip() for b in bullets][:6]
-#
-#         intro = (f"Here’s the quick version of **{query.rstrip(' ?!.')}**:"
-#                  if query else "Here’s the quick version:")
-#         body = "\n".join(f"- {b}" for b in bullets if b)  # use Markdown list dashes
-#         return f"{intro}\n\n{body}".strip()
-#
-#     # ---------- INTERVIEW ----------
-#     if mode == "Interview":
-#         return " ".join(_sentences(t)[:6])
-#
-#     # ---------- STORYTELLING ----------
-#     if mode == "Storytelling":
-#         sents = _sentences(t)
-#         if len(sents) <= 3:
-#             return re.sub(r"\*\*(.*?)\*\*", r"\1", " ".join(sents))
-#         mid = max(2, min(len(sents) - 2, 4))
-#         p1 = " ".join(sents[:mid])
-#         p2 = " ".join(sents[mid:][:5])
-#         # remove stray bolds
-#         p1 = re.sub(r"\*\*(.*?)\*\*", r"\1", p1)
-#         p2 = re.sub(r"\*\*(.*?)\*\*", r"\1", p2)
-#         if not re.search(r"(so|therefore|this (taught|reinforced)|the takeaway|as a result)\b", p2, re.I):
-#             p2 += " This reinforced my belief in building carefully while iterating quickly."
-#         return f"{p1}\n\n{p2}"
-#
-#     # ---------- REFLECTIVE ----------
-#     if mode == "Reflective":
-#         sents = _sentences(t)
-#         para = " ".join(sents[:3])
-#         raw_lines = [ln.strip("•- ").strip() for ln in t.split("\n") if ln.strip()]
-#         if len(raw_lines) < 3:
-#             raw_lines = sents[3:] + sents[:3]
-#         pts = [re.sub(r"\*\*(.*?)\*\*", r"\1", x) for x in raw_lines][:9]
-#
-#         def take(label, start):
-#             chunk = pts[start:start+2]
-#             return f"- **{label}:** " + "; ".join(chunk) if chunk else f"- **{label}:** —"
-#
-#         intro = (f"On **{query.rstrip(' ?!.')}**, here’s how I think about it:"
-#                  if query else "Here’s how I think about it:")
-#         return "\n".join([intro, "", para, "", take("Energizes me", 0),
-#                           take("Drains me", 2), take("Growth focus", 4)]).strip()
-#
-#     # ---------- HUMBLE BRAG ----------
-#     if mode == "Humble Brag":
-#         raw_lines = [ln.strip() for ln in t.split("\n") if ln.strip()]
-#         bullets = [re.sub(r"^[\-\•\–]\s*", "", ln) for ln in raw_lines
-#                    if ln.lstrip().startswith((" ", "•", "–"))]
-#         if not bullets:
-#             bullets = _sentences(t)
-#         bullets = [re.sub(r"\*\*(.*?)\*\*", r"\1", b).strip() for b in bullets][:5]
-#
-#         shaped = []
-#         for b in bullets:
-#             if not re.search(r"(impact|result|improved|increased|reduced|shipped|launched|accuracy|latency|cost|outcomes|growth)", b, re.I):
-#                 b += " — delivered measurable impact."
-#             shaped.append(b)
-#         return "\n".join(f" {b}" for b in shaped)
-#
-#     # ---------- FALLBACK ----------
-#     return re.sub(r"\*\*(.*?)\*\*", r"\1", t)
 
 def render_source_chips(ctx_items, turn_key: str):
     if not ctx_items:
@@ -1032,16 +944,4 @@ if sess["history"]:
     filename = (sess["title"] or "chat").replace(" ", "_").replace("/", "_")
     st.download_button("📥 Download Markdown", md, file_name=f"{filename}.md")
 
-
-# SYSTEM_PROMPT = """You are the personal codex of the user.
-# Answer questions about the user's background, projects, skills, values and working style.
-# Ground every answer in the provided context. If unsure, say you don't know.
-# Keep answers grounded, concise, and in the user's voice."""
-#
-# MODES = {
-#     "Interview": "Be concise, professional, evidence-driven. Prefer short paragraphs.",
-#     "Personal storytelling": "Be warm, narrative, reflective. Use first-person voice with brief anecdotes.",
-#     "Fast facts": "Answer as bullet points / TL;DR with crisp facts.",
-#     "Humble brag": "Be confident and energetic, but stay truthful and specific."
-# }
 
