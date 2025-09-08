@@ -1,0 +1,35 @@
+{
+  "title": "What kind of engineer are you?",
+  "history": [
+    {
+      "q": "What kind of engineer are you?",
+      "a": "I am an AI Automation Engineer with a strong focus on developing AI-driven solutions to optimize workflows and enhance operational efficiency. For instance, at Timbuk2.AI, I designed and implemented automation solutions that integrated AI models into business workflows, significantly improving operational performance. My background in software development also allows me to build scalable systems that support these innovations.",
+      "mode": "Interview",
+      "ctx": [
+        {
+          "rank": 1,
+          "score": 1.4428749084472656,
+          "doc_id": "Furaha kabeya-ML-CV.pdf",
+          "type": "cv",
+          "text": "furahakabeya.fk@gmail.com LinkedIn | Github FURAHA KABEYA MSC CANDIDATE IN MACHINE LEARNING & ARTIFICIAL INTELLIGENCE EDUCATION MSC IN MACHINE LEARNING & ARTIFICIAL INTELLIGENCE (GOOGLE DEEPMIND SCHOLAR) • 2025 Stellenbosch University, South Africa BSC HONOURS IN BIOINFORMATICS & COMPUTATIONAL BIOLOGY • 2024 Stellenbosch University, South Africa BSC IN COMPUTER SCIENCE• 2022 University of the Witwatersrand, South Africa PROFILE A creative and detail-oriented professional passionate about leveraging AI to solve real-world challenges and driving impactful innovation. With expertise in machine learning, AI automation, and software development, I thrive in fast-paced environments while ensuring efficiency, scalability, and user-centric design in all solutions. My strengths include problem-solving, project management, and AI-driven optimization, with a focus on computer vision, deep learning, and sustainable AI solutions. TECHNICAL SKILLS § Programming Languages: Python, JavaScript, C++, Java, C# § Machine Learning & AI: TensorFlow, PyTorch, Scikit-learn, NLP, Reinforcement Learning, Probabilistic Modeling § Cloud & DevOps: AWS (Lambda, S3, EC2), Docker § Web Development: React.js, Redux, Node.js, Express.js, jQuery § Automation & APIs: RESTful APIs, Zapier, Workflow Automation § Database Management: PostgreSQL, MySQL § UI/UX & Design: Figma, Bootstrap § Version Control & Collaboration: Git, GitHub SOFT SKILLS § Problem-solving & critical thinking § Time management & fast learning § Adaptability & self-motivation § Analytical thinking & attention to detail § Collaboration & teamwork § Leadership & project management EXPERIENCE AI AUTOMATION ENGINEER • JUL 2024 – JAN 2025 Timbuk2.AI | Cape Town, South Africa • Designed and implemented AI-driven automation solutions to optimize workflows and enhance operational efficiency. • Developed AI-powered business solutions for scalability and data-driven decision-making. • Integrated AI models into business workflows to improve operational efficiency. SOFTWARE DEVELOPER • APR 2023 – JUN 2024 Timbuk2.AI | Cape Town, South Africa • Designed and implemented front & back-end components of timbuk2's AI-powered platform, ensuring scalability and performance. • Developed and integrated RESTful APIs, ensuring efficient data flow and system interoperability. • Leveraged AWS services, including Lambda, S3 and EC2, to deploy scalable solutions and automate infrastructure management. • Implemented Security Protocols and Conducted Usability Testing. PERSONAL PROJECTS • Naive Bayes Spam Classifier (Python) Implemented Naive Bayes from"
+        },
+        {
+          "rank": 2,
+          "score": 1.4670848846435547,
+          "doc_id": "Furaha kabeya-ML-CV.pdf",
+          "type": "cv",
+          "text": "SOFTWARE DEVELOPER • APR 2023 – JUN 2024 Timbuk2.AI | Cape Town, South Africa • Designed and implemented front & back-end components of timbuk2's AI-powered platform, ensuring scalability and performance. • Developed and integrated RESTful APIs, ensuring efficient data flow and system interoperability. • Leveraged AWS services, including Lambda, S3 and EC2, to deploy scalable solutions and automate infrastructure management. • Implemented Security Protocols and Conducted Usability Testing. PERSONAL PROJECTS • Naive Bayes Spam Classifier (Python) Implemented Naive Bayes from scratch to classify SMS/email messages. • Diabetes Predictive Healthcare Model (Python) Built and trained a neural network to predict diabetes from patient medical data. • Sorting Algorithm Analyzer (Python) Built a program to analyze and visualize sorting algorithm performance, including: o Merge Sort o Quicksort o Bubble Sort o Selection Sort o Insertion Sort • Maze Solver with BFS/DFS (Python) Designed a maze generator and implemented BFS/DFS to auto-solve paths. REFERENCES AVAILABLE UPON REQUEST COMPUTER SCIENCE INTERN • DEC 2021 – FEB 2022 Quantify Your Future | Remote (South Africa) • Collected, analyzed, and interpreted large datasets for major banks (ABSA, FNB, Nedbank) to improve products. • Used Python for data analysis and visualization, contributing to faster insights. RESEARCH & ACADEMIC PROJECTS HONOURS RESEARCH PROJECT – AI FOR FORESTRY ENGINEER • JUN 2024 – NOV 2024 Stellenbosch University | Stellenbosch, South Africa • Title: The Signal and the Noise: Using AI Techniques to Find Patterns in Variation in Daily Stem Growth Data and Environmental Data in Eucalypts. • Developed machine learning models (LSTM, Random Forest, XGBoost) to predict tree stem growth using environmental data (temperature, soil moisture, VPD). • Applied time-series analysis, feature engineering, and imputation techniques to handle missing dendrometer data. • Evaluated models using MAE, RMSE, R², MAPE, and MBE, achieving high accuracy in predicting growth trends. • Compared AI models with traditional linear regression, demonstrating ML superiority in time-series forecasting. STUDENT PROJECT – MOBILE APP FOR BARTER SYSTEM • FEB 2022 – NOV 2022 University of the Witwatersrand | Johannesburg, South Africa • Developed a React Native application that enables users to swap items instead of purchasing."
+        },
+        {
+          "rank": 3,
+          "score": 1.6336668729782104,
+          "doc_id": "Furaha kabeya-ML-CV.pdf",
+          "type": "cv",
+          "text": "time-series analysis, feature engineering, and imputation techniques to handle missing dendrometer data. • Evaluated models using MAE, RMSE, R², MAPE, and MBE, achieving high accuracy in predicting growth trends. • Compared AI models with traditional linear regression, demonstrating ML superiority in time-series forecasting. STUDENT PROJECT – MOBILE APP FOR BARTER SYSTEM • FEB 2022 – NOV 2022 University of the Witwatersrand | Johannesburg, South Africa • Developed a React Native application that enables users to swap items instead of purchasing. • Integrated a real-time chat system to facilitate secure communication between users. • Designed an intuitive UI/UX for accessibility, making item exchange seamless."
+        }
+      ],
+      "ts": 1757355841.768942
+    }
+  ],
+  "mode": "Interview"
+}

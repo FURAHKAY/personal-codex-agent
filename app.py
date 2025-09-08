@@ -82,60 +82,83 @@ def save_chat(cid: str, session_obj: dict):
 st.set_page_config(page_title="Personal Codex Agent", page_icon="🗂️", layout="wide")
 st.markdown("""
 <style>
-    :root {
-      --bg: #ffffff;
-      --fg: #0f172a;
-      --muted: #64748b;
-      --card: #ffffff;
-      --bubble-user: #f6f7f9;
-      --bubble-assistant: #fffef7;
-    }
-    
-    html.dark, .dark {
-      --bg: #0b1020;
-      --fg: #e5e7eb;
-      --muted: #94a3b8;
-      --card: #0f172a;
-      --bubble-user: rgba(148,163,184,.18);
-      --bubble-assistant: rgba(234,179,8,.12);
-    }
+/* --- Design tokens --- */
+:root{
+  --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --card:#ffffff;
+  --bubble-user:#f6f7f9; --bubble-assistant:#fffef7; --border:#e5e7eb;
+}
+html.dark, body.dark{
+  --bg:#0b1020; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f172a;
+  --bubble-user:rgba(148,163,184,.18);
+  --bubble-assistant:rgba(234,179,8,.12);
+  --border:#1f2937;
+}
 
-  .block-container {max-width: 920px;}
-  .top-menu { position: sticky; top: 0; z-index: 12; background: rgba(255,255,255,0.85);
-              -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 8px 0 12px; }
-  .question-pill { border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 10px; background:#fff; cursor:pointer; }
-  .question-pill:hover { background:#f8fafc; }
+/* --- Apply tokens to Streamlit shells --- */
+html, body, .stApp, [data-testid="stAppViewContainer"]{
+  background:var(--bg) !important; color:var(--fg) !important;
+}
+[data-testid="stSidebar"]{
+  background:var(--bg) !important; color:var(--fg) !important;
+  border-right:1px solid var(--border);
+}
+div[data-testid="stHeader"]{ background:transparent !important; }
 
-  .bubble-user, .bubble-assistant { border-radius: 14px; padding: 12px 14px; margin: 8px 0 4px;
-                                    border:1px solid rgba(0,0,0,0.06); }
-  .bubble-user { background:#f6f7f9; }
-  .bubble-assistant { background:#fffef7; }
+/* --- Page chrome --- */
+.block-container{max-width:920px;}
+.top-menu{
+  position:sticky; top:0; z-index:12; background:var(--card);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  padding:8px 0 12px; border-bottom:1px solid var(--border);
+}
 
-  /* polish */
-  .bubble-assistant, .bubble-user { line-height:1.55; }
-  .bubble-assistant p, .bubble-user p { margin:0 0 8px; }
-  .bubble-assistant ul { margin:6px 0 8px 1.1rem; }
-  .meta-chip { font-size:12px; color:#64748b; letter-spacing:.1px; margin:2px 0 8px; }
-  .chip { display:inline-block; padding:3px 8px; border:1px solid #e5e7eb; border-radius:999px;
-          margin:2px 6px 0 0; background:#f8fafc; font-size:12px }
+/* --- Chat bubbles --- */
+.bubble-user, .bubble-assistant{
+  border-radius:14px; padding:12px 14px; margin:8px 0 4px;
+  border:1px solid var(--border);
+}
+.bubble-user{ background:var(--bubble-user); }
+.bubble-assistant{ background:var(--bubble-assistant); }
+.meta-chip{ font-size:12px; color:var(--muted); }
 
-  /* optional dark-theme hooks */
-  :root { --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --card:#ffffff; }
-  .dark :root, .dark { --bg:#0b1020; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f172a; }
-  .block-container { background:var(--bg); color:var(--fg); }
-  .bubble-user{ background:rgba(148,163,184,.12); }
-  .bubble-assistant{ background:rgba(234,179,8,.08); }
-  .meta-chip{ color:var(--muted); }
-  
-    .block-container { background: var(--bg); color: var(--fg); }
-    .top-menu { background: var(--card); }
-    .bubble-user { background: var(--bubble-user); color: var(--fg); }
-    .bubble-assistant { background: var(--bubble-assistant); color: var(--fg); }
-    .meta-chip { color: var(--muted); }
-    .chat-user, .chat-assistant { color: var(--fg); }
+/* --- Buttons --- */
+.stButton>button{
+  background:var(--card); color:var(--fg); border:1px solid var(--border);
+  border-radius:10px; padding:.5rem .8rem;
+}
+.stButton>button:hover{ filter:brightness(0.98); }
 
+/* --- Inputs (text, chat, select) --- */
+.stTextInput input, .stTextArea textarea{
+  background:var(--card) !important; color:var(--fg) !important;
+  border:1px solid var(--border) !important;
+}
+.stChatInput textarea{
+  background:var(--card) !important; color:var(--fg) !important;
+  border:1px solid var(--border) !important;
+}
+div[data-baseweb="select"]>div{
+  background:var(--card) !important; color:var(--fg) !important;
+  border:1px solid var(--border) !important; border-radius:10px;
+}
+
+/* --- Expanders --- */
+.streamlit-expanderHeader{
+  color:var(--fg) !important; background:var(--card) !important;
+  border:1px solid var(--border);
+}
+.streamlit-expanderContent{ background:var(--card) !important; }
+
+/* --- Small polish --- */
+.question-pill{
+  border:1px solid var(--border); padding:8px 12px; border-radius:10px;
+  background:var(--card); cursor:pointer;
+}
+.question-pill:hover{ filter:brightness(0.98); }
+.chat-user, .chat-assistant{ color:var(--fg); }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # --------------------------
@@ -636,9 +659,10 @@ with st.sidebar:
           (function() {{
             const doc = window.parent?.document || document;
             const root = doc.documentElement;
-            if (root && root.classList) {{
-              root.classList.toggle('dark', {str(dark_on).lower()});
-            }}
+            const body = doc.body;
+            const on = {str(dark_on).lower()};
+            if (root?.classList) root.classList.toggle('dark', on);
+            if (body?.classList) body.classList.toggle('dark', on);
           }})();
         </script>
         """,
