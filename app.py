@@ -82,82 +82,132 @@ def save_chat(cid: str, session_obj: dict):
 st.set_page_config(page_title="Personal Codex Agent", page_icon="🗂️", layout="wide")
 st.markdown("""
 <style>
-/* --- Design tokens --- */
-:root{
-  --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --card:#ffffff;
-  --bubble-user:#f6f7f9; --bubble-assistant:#fffef7; --border:#e5e7eb;
+/* Put this inside your big <style> block */
+:root {
+  --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --card:#ffffff; --border:#e5e7eb;
+  --bubble-user:#f6f7f9; --bubble-ai:#fffef7;
 }
-html.dark, body.dark{
-  --bg:#0b1020; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f172a;
-  --bubble-user:rgba(148,163,184,.18);
-  --bubble-assistant:rgba(234,179,8,.12);
-  --border:#1f2937;
+html.dark, .stApp.dark, body.dark {
+  --bg:#0b1020; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f172a; --border:#1f2937;
+  --bubble-user:rgba(148,163,184,.18); --bubble-ai:rgba(234,179,8,.12);
 }
 
-/* --- Apply tokens to Streamlit shells --- */
-html, body, .stApp, [data-testid="stAppViewContainer"]{
-  background:var(--bg) !important; color:var(--fg) !important;
+/* Core containers */
+.stApp, .block-container, [data-testid="stAppViewContainer"] {
+  background: var(--bg) !important; color: var(--fg) !important;
 }
-[data-testid="stSidebar"]{
-  background:var(--bg) !important; color:var(--fg) !important;
-  border-right:1px solid var(--border);
-}
-div[data-testid="stHeader"]{ background:transparent !important; }
+[data-testid="stSidebar"] { background: var(--card) !important; color: var(--fg) !important; border-right:1px solid var(--border); }
 
-/* --- Page chrome --- */
-.block-container{max-width:920px;}
-.top-menu{
-  position:sticky; top:0; z-index:12; background:var(--card);
-  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
-  padding:8px 0 12px; border-bottom:1px solid var(--border);
-}
+/* Text-ish things */
+h1, h2, h3, h4, h5, h6, p, span, label, .stCaption, .meta-chip { color: var(--fg) !important; }
+.stMarkdown, .st-emotion-cache-1y4p8pa { color: var(--fg) !important; } /* catch extra wrappers */
 
-/* --- Chat bubbles --- */
-.bubble-user, .bubble-assistant{
-  border-radius:14px; padding:12px 14px; margin:8px 0 4px;
-  border:1px solid var(--border);
+/* Inputs/buttons/popovers */
+.stTextInput input, .stChatInput textarea, .stSelectbox div[data-baseweb="select"] {
+  background: var(--card) !important; color: var(--fg) !important; border:1px solid var(--border) !important;
 }
-.bubble-user{ background:var(--bubble-user); }
-.bubble-assistant{ background:var(--bubble-assistant); }
-.meta-chip{ font-size:12px; color:var(--muted); }
-
-/* --- Buttons --- */
-.stButton>button{
-  background:var(--card); color:var(--fg); border:1px solid var(--border);
-  border-radius:10px; padding:.5rem .8rem;
-}
-.stButton>button:hover{ filter:brightness(0.98); }
-
-/* --- Inputs (text, chat, select) --- */
-.stTextInput input, .stTextArea textarea{
-  background:var(--card) !important; color:var(--fg) !important;
-  border:1px solid var(--border) !important;
-}
-.stChatInput textarea{
-  background:var(--card) !important; color:var(--fg) !important;
-  border:1px solid var(--border) !important;
-}
-div[data-baseweb="select"]>div{
-  background:var(--card) !important; color:var(--fg) !important;
-  border:1px solid var(--border) !important; border-radius:10px;
+.stButton>button, .stDownloadButton>button, .stPopover>div>div {
+  background: var(--card) !important; color: var(--fg) !important; border:1px solid var(--border) !important;
 }
 
-/* --- Expanders --- */
-.streamlit-expanderHeader{
-  color:var(--fg) !important; background:var(--card) !important;
-  border:1px solid var(--border);
-}
-.streamlit-expanderContent{ background:var(--card) !important; }
+/* Chat bubbles */
+.bubble-user, .bubble-assistant { border-radius:14px; padding:12px 14px; border:1px solid var(--border); }
+.bubble-user { background: var(--bubble-user); }
+.bubble-assistant { background: var(--bubble-ai); }
 
-/* --- Small polish --- */
-.question-pill{
-  border:1px solid var(--border); padding:8px 12px; border-radius:10px;
-  background:var(--card); cursor:pointer;
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --muted: #64748b;
+  --card: #ffffff;
+  --border: #e5e7eb;
+
+  --bubble-user: #f6f7f9;
+  --bubble-ai: #fffef7;
 }
-.question-pill:hover{ filter:brightness(0.98); }
-.chat-user, .chat-assistant{ color:var(--fg); }
+
+html.dark, .dark, .stApp.dark {
+  --bg: #0b1020;
+  --fg: #e5e7eb;
+  --muted: #94a3b8;
+  --card: #0f172a;
+  --border: #1f2937;
+
+  --bubble-user: rgba(148,163,184,.18);
+  --bubble-ai: rgba(234,179,8,.12);
+}
+
+/* ---------- App surfaces ---------- */
+.stApp, .block-container { background: var(--bg) !important; color: var(--fg) !important; }
+[data-testid="stSidebar"] { background: var(--card) !important; color: var(--fg) !important; border-right: 1px solid var(--border); }
+.top-menu { background: var(--card); }
+
+/* ---------- Text & meta ---------- */
+.meta-chip, .hint, .caption, .stCaption, .st-emotion-cache-15hul6a { color: var(--muted) !important; }
+
+/* ---------- Inputs ---------- */
+.stTextInput > div > div > input,
+.stTextArea textarea,
+.stChatInput textarea,
+.stSelectbox > div > div {
+  background: var(--card) !important;
+  color: var(--fg) !important;
+  border: 1px solid var(--border) !important;
+}
+.stTextInput input::placeholder,
+.stChatInput textarea::placeholder { color: var(--muted) !important; }
+
+/* ---------- Buttons ---------- */
+.stButton > button, .stDownloadButton > button {
+  background: var(--card) !important;
+  color: var(--fg) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* ---------- Expanders & tabs ---------- */
+.st-expander, .stTabs { background: var(--card) !important; color: var(--fg) !important; }
+.st-expander .st-emotion-cache-ue6h4q { background: var(--card) !important; }
+
+/* ---------- Chat bubbles ---------- */
+.bubble-user, .bubble-assistant {
+  border-radius: 14px; padding: 12px 14px; margin: 8px 0 4px;
+  border: 1px solid var(--border);
+}
+.bubble-user { background: var(--bubble-user); }
+.bubble-assistant { background: var(--bubble-ai); }
+
+/* ---------- Misc polish ---------- */
+.block-container { max-width: 1000px; }
+.question-pill { border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; background: var(--card); }
+.question-pill:hover { filter: brightness(0.98); }
 </style>
 """, unsafe_allow_html=True)
+
+# --- Theme state (must be before CSS/widgets) ---
+if "dark_theme" not in st.session_state:
+    st.session_state["dark_theme"] = False
+
+def _apply_theme(on: bool):
+    st.markdown(
+        f"""
+        <script>
+          (function() {{
+            const doc = window.parent?.document || document;
+            const root = doc?.documentElement;
+            const app  = doc?.querySelector('.stApp');
+            const body = doc?.body;
+            if (root) root.classList.toggle('dark', {str(on).lower()});
+            if (app)  app.classList.toggle('dark', {str(on).lower()});
+            if (body) body.classList.toggle('dark', {str(on).lower()});
+          }})();
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
+
+_apply_theme(st.session_state["dark_theme"])
+
 
 
 
@@ -220,44 +270,65 @@ def embed_one(text: str) -> np.ndarray:
     v = client.embeddings.create(model=EMBED_MODEL, input=[text]).data[0].embedding
     return np.array(v, dtype="float32")[None, :]
 
+ABOUT_RE   = re.compile(r"\b(about\s+me|who\s+are\s+you|who\s+am\s+i|bio)\b", re.I)
+PROJECT_RE = re.compile(r"\b(project|built|repo|code|readme)\b", re.I)
+CV_RE      = re.compile(r"\b(role|engineer|background|resume|cv|experience|years)\b", re.I)
+VALUES_RE  = re.compile(r"\b(team|culture|values|collaborat(e|ion|ive)?)\b", re.I)
+
 def guess_intent(q: str) -> str:
     ql = q.lower()
-    if any(k in ql for k in ["role", "engineer", "background", "resume", "cv", "experience", "years"]):
-        return "cv"
-    if any(k in ql for k in ["project", "built", "repo", "code", "readme"]):
-        return "project"
-    if any(k in ql for k in ["team", "culture", "values", "collaborat"]):
-        return "values"
-    if any(k in ql for k in ["about", "who are you", "who am i", "bio"]):
-        return "about"
+    if CV_RE.search(ql):      return "cv"
+    if PROJECT_RE.search(ql): return "project"
+    if VALUES_RE.search(ql):  return "values"
+    if ABOUT_RE.search(ql):   return "about"
     return "any"
 
-def retrieve(query: str, k: int = 4):
+def retrieve(query: str, k: int = 6):
     qv = embed_one(query)
-    over_k = max(k * 3, 8)
+    # Overfetch, then de-dup by doc and by near-duplicate text
+    over_k = max(k * 6, 48)
     D, I = index.search(qv, over_k)
+
+    live = {p.name for p in Path("data").glob("*")}
     intent = guess_intent(query)
-    picked = []
+    picked, seen_txt = [], set()
+
     for rank, idx_ in enumerate(I[0]):
         if idx_ == -1: continue
         rec = records[idx_]
-        if intent != "any" and rec.get("type") != intent:
-            continue
+        if rec["doc_id"] not in live: continue
+        if intent != "any" and rec.get("type") != intent: continue
+
+        # simple near-dup filter
+        key = rec["doc_id"], rec["text"][:160]
+        if key in seen_txt: continue
+        seen_txt.add(key)
+
         picked.append({"rank": len(picked)+1, "score": float(D[0][rank]), **rec})
         if len(picked) >= k: break
+
+    # fallback to any live if intent produced nothing
     if not picked:
-        for rank, idx_ in enumerate(I[0][:k]):
+        for rank, idx_ in enumerate(I[0]):
             if idx_ == -1: continue
             rec = records[idx_]
-            picked.append({"rank": rank+1, "score": float(D[0][rank]), **rec})
+            if rec["doc_id"] in live:
+                picked.append({"rank": len(picked)+1, "score": float(D[0][rank]), **rec})
+                if len(picked) >= k: break
     return picked
+
+
 
 def build_history_messages(history, limit=3):
     msgs = []
     for turn in history[-limit:]:
         msgs.append({"role": "user", "content": turn["q"]})
         msgs.append({"role": "assistant", "content": turn["a"]})
+    if history:
+        msgs.append({"role": "system",
+                     "content": "Do not repeat prior wording verbatim. Add at least one new detail or angle."})
     return msgs
+
 
 import re
 
@@ -337,93 +408,99 @@ def inline_citations(ctx_items):
     return "  \n\n*Sources: " + " ".join(tags) + "*"
 
 def postprocess_by_mode(text: str, mode: str, query: str = "") -> str:
-    """
-    Normalize the model output per mode for consistent, polished UX.
-    `query` is used to craft a natural intro line (esp. Fast Facts / Reflective).
-    """
     t = (text or "").strip()
-    if not t:
-        return t
+    if not t: return t
+    # light cleanup only
+    return t.replace("**", "").strip()
 
-    import re
-
-    t = re.sub(r"\*\*(.*?)\*\*", r"\1", t)
-
-    def _sentences(s: str):
-        return [x.strip() for x in re.split(r"(?<=[.!?])\s+", s) if x.strip()]
-
-    # ---------- FAST FACTS ----------
-    if mode == "Fast Facts":
-        # use existing bullets if present; otherwise split sentences
-        raw_lines = [ln.strip() for ln in t.split("\n") if ln.strip()]
-        bullets = [re.sub(r"^[\-\•\–]\s*", "", ln) for ln in raw_lines
-                   if ln.lstrip().startswith(("-", "•", "–"))]
-        if not bullets:
-            bullets = _sentences(t)
-
-        # clean: strip stray bold markers & trim to 6
-        bullets = [re.sub(r"\*\*(.*?)\*\*", r"\1", b).strip() for b in bullets][:6]
-
-        intro = (f"Here’s the quick version of **{query.rstrip(' ?!.')}**:"
-                 if query else "Here’s the quick version:")
-        body = "\n".join(f"- {b}" for b in bullets if b)  # use Markdown list dashes
-        return f"{intro}\n\n{body}".strip()
-
-    # ---------- INTERVIEW ----------
-    if mode == "Interview":
-        return " ".join(_sentences(t)[:6])
-
-    # ---------- STORYTELLING ----------
-    if mode == "Storytelling":
-        sents = _sentences(t)
-        if len(sents) <= 3:
-            return re.sub(r"\*\*(.*?)\*\*", r"\1", " ".join(sents))
-        mid = max(2, min(len(sents) - 2, 4))
-        p1 = " ".join(sents[:mid])
-        p2 = " ".join(sents[mid:][:5])
-        # remove stray bolds
-        p1 = re.sub(r"\*\*(.*?)\*\*", r"\1", p1)
-        p2 = re.sub(r"\*\*(.*?)\*\*", r"\1", p2)
-        if not re.search(r"(so|therefore|this (taught|reinforced)|the takeaway|as a result)\b", p2, re.I):
-            p2 += " This reinforced my belief in building carefully while iterating quickly."
-        return f"{p1}\n\n{p2}"
-
-    # ---------- REFLECTIVE ----------
-    if mode == "Reflective":
-        sents = _sentences(t)
-        para = " ".join(sents[:3])
-        raw_lines = [ln.strip("•- ").strip() for ln in t.split("\n") if ln.strip()]
-        if len(raw_lines) < 3:
-            raw_lines = sents[3:] + sents[:3]
-        pts = [re.sub(r"\*\*(.*?)\*\*", r"\1", x) for x in raw_lines][:9]
-
-        def take(label, start):
-            chunk = pts[start:start+2]
-            return f"- **{label}:** " + "; ".join(chunk) if chunk else f"- **{label}:** —"
-
-        intro = (f"On **{query.rstrip(' ?!.')}**, here’s how I think about it:"
-                 if query else "Here’s how I think about it:")
-        return "\n".join([intro, "", para, "", take("Energizes me", 0),
-                          take("Drains me", 2), take("Growth focus", 4)]).strip()
-
-    # ---------- HUMBLE BRAG ----------
-    if mode == "Humble Brag":
-        raw_lines = [ln.strip() for ln in t.split("\n") if ln.strip()]
-        bullets = [re.sub(r"^[\-\•\–]\s*", "", ln) for ln in raw_lines
-                   if ln.lstrip().startswith((" ", "•", "–"))]
-        if not bullets:
-            bullets = _sentences(t)
-        bullets = [re.sub(r"\*\*(.*?)\*\*", r"\1", b).strip() for b in bullets][:5]
-
-        shaped = []
-        for b in bullets:
-            if not re.search(r"(impact|result|improved|increased|reduced|shipped|launched|accuracy|latency|cost|outcomes|growth)", b, re.I):
-                b += " — delivered measurable impact."
-            shaped.append(b)
-        return "\n".join(f" {b}" for b in shaped)
-
-    # ---------- FALLBACK ----------
-    return re.sub(r"\*\*(.*?)\*\*", r"\1", t)
+# def postprocess_by_mode(text: str, mode: str, query: str = "") -> str:
+#     """
+#     Normalize the model output per mode for consistent, polished UX.
+#     `query` is used to craft a natural intro line (esp. Fast Facts / Reflective).
+#     """
+#     t = (text or "").strip()
+#     if not t:
+#         return t
+#
+#     import re
+#
+#     t = re.sub(r"\*\*(.*?)\*\*", r"\1", t)
+#
+#     def _sentences(s: str):
+#         return [x.strip() for x in re.split(r"(?<=[.!?])\s+", s) if x.strip()]
+#
+#     # ---------- FAST FACTS ----------
+#     if mode == "Fast Facts":
+#         # use existing bullets if present; otherwise split sentences
+#         raw_lines = [ln.strip() for ln in t.split("\n") if ln.strip()]
+#         bullets = [re.sub(r"^[\-\•\–]\s*", "", ln) for ln in raw_lines
+#                    if ln.lstrip().startswith(("-", "•", "–"))]
+#         if not bullets:
+#             bullets = _sentences(t)
+#
+#         # clean: strip stray bold markers & trim to 6
+#         bullets = [re.sub(r"\*\*(.*?)\*\*", r"\1", b).strip() for b in bullets][:6]
+#
+#         intro = (f"Here’s the quick version of **{query.rstrip(' ?!.')}**:"
+#                  if query else "Here’s the quick version:")
+#         body = "\n".join(f"- {b}" for b in bullets if b)  # use Markdown list dashes
+#         return f"{intro}\n\n{body}".strip()
+#
+#     # ---------- INTERVIEW ----------
+#     if mode == "Interview":
+#         return " ".join(_sentences(t)[:6])
+#
+#     # ---------- STORYTELLING ----------
+#     if mode == "Storytelling":
+#         sents = _sentences(t)
+#         if len(sents) <= 3:
+#             return re.sub(r"\*\*(.*?)\*\*", r"\1", " ".join(sents))
+#         mid = max(2, min(len(sents) - 2, 4))
+#         p1 = " ".join(sents[:mid])
+#         p2 = " ".join(sents[mid:][:5])
+#         # remove stray bolds
+#         p1 = re.sub(r"\*\*(.*?)\*\*", r"\1", p1)
+#         p2 = re.sub(r"\*\*(.*?)\*\*", r"\1", p2)
+#         if not re.search(r"(so|therefore|this (taught|reinforced)|the takeaway|as a result)\b", p2, re.I):
+#             p2 += " This reinforced my belief in building carefully while iterating quickly."
+#         return f"{p1}\n\n{p2}"
+#
+#     # ---------- REFLECTIVE ----------
+#     if mode == "Reflective":
+#         sents = _sentences(t)
+#         para = " ".join(sents[:3])
+#         raw_lines = [ln.strip("•- ").strip() for ln in t.split("\n") if ln.strip()]
+#         if len(raw_lines) < 3:
+#             raw_lines = sents[3:] + sents[:3]
+#         pts = [re.sub(r"\*\*(.*?)\*\*", r"\1", x) for x in raw_lines][:9]
+#
+#         def take(label, start):
+#             chunk = pts[start:start+2]
+#             return f"- **{label}:** " + "; ".join(chunk) if chunk else f"- **{label}:** —"
+#
+#         intro = (f"On **{query.rstrip(' ?!.')}**, here’s how I think about it:"
+#                  if query else "Here’s how I think about it:")
+#         return "\n".join([intro, "", para, "", take("Energizes me", 0),
+#                           take("Drains me", 2), take("Growth focus", 4)]).strip()
+#
+#     # ---------- HUMBLE BRAG ----------
+#     if mode == "Humble Brag":
+#         raw_lines = [ln.strip() for ln in t.split("\n") if ln.strip()]
+#         bullets = [re.sub(r"^[\-\•\–]\s*", "", ln) for ln in raw_lines
+#                    if ln.lstrip().startswith((" ", "•", "–"))]
+#         if not bullets:
+#             bullets = _sentences(t)
+#         bullets = [re.sub(r"\*\*(.*?)\*\*", r"\1", b).strip() for b in bullets][:5]
+#
+#         shaped = []
+#         for b in bullets:
+#             if not re.search(r"(impact|result|improved|increased|reduced|shipped|launched|accuracy|latency|cost|outcomes|growth)", b, re.I):
+#                 b += " — delivered measurable impact."
+#             shaped.append(b)
+#         return "\n".join(f" {b}" for b in shaped)
+#
+#     # ---------- FALLBACK ----------
+#     return re.sub(r"\*\*(.*?)\*\*", r"\1", t)
 
 def render_source_chips(ctx_items, turn_key: str):
     if not ctx_items:
@@ -649,25 +726,28 @@ with st.sidebar:
 
     # Theme toggle
     from streamlit import components
-
-    dark_on = st.toggle("🌙 Dark theme", value=st.session_state.get("dark_theme", False))
-    st.session_state["dark_theme"] = dark_on
-
-    components.v1.html(
+    # ONE toggle only
+    st.toggle("🌙 Dark theme", key="dark_theme")
+    # re-apply on every rerun (no key arg)
+    st.components.v1.html(
         f"""
         <script>
           (function() {{
             const doc = window.parent?.document || document;
             const root = doc.documentElement;
+            const app  = doc.querySelector('.stApp');
             const body = doc.body;
-            const on = {str(dark_on).lower()};
-            if (root?.classList) root.classList.toggle('dark', on);
-            if (body?.classList) body.classList.toggle('dark', on);
+            const on = {str(st.session_state['dark_theme']).lower()};
+            if (root) root.classList.toggle('dark', on);
+            if (app)  app.classList.toggle('dark', on);
+            if (body) body.classList.toggle('dark', on);
           }})();
         </script>
         """,
         height=0,
+        scrolling=True,
     )
+
 
     # Upload + rebuild index (simple rebuild path; fine for small corpora)
 
@@ -676,66 +756,64 @@ with st.sidebar:
     if uploaded:
         data_dir = Path("data");
         data_dir.mkdir(exist_ok=True)
-        saved = []
         for uf in uploaded:
-            out = data_dir / uf.name
-            out.write_bytes(uf.getbuffer());
-            saved.append(uf.name)
+            (data_dir / uf.name).write_bytes(uf.getbuffer())
+
+        # Re-index immediately (no button)
+        with st.spinner("Indexing new documents…"):
+            from rag import chunk, load_texts
+            import faiss, pickle, json, numpy as np
+
+            IDX_DIR = Path("index");
+            IDX_DIR.mkdir(exist_ok=True)
+            meta_fp, idx_fp, rec_fp = IDX_DIR / "meta.json", IDX_DIR / "faiss.index", IDX_DIR / "records.pkl"
 
 
-        # local infer_type (matches build_index.py)
-        def infer_type(name: str) -> str:
-            n = name.lower()
-            if any(w in n for w in ["cv", "resume", "education", "experience"]): return "cv"
-            if any(w in n for w in ["project", "readme", "repo", "code"]):       return "project"
-            if any(w in n for w in ["team", "values", "culture", "collaborat"]):  return "values"
-            if any(w in n for w in ["about", "bio", "profile"]):                  return "about"
-            return "any"
+            def infer_type(name: str) -> str:
+                n = name.lower()
+                if any(w in n for w in ["cv", "resume", "education", "experience"]): return "cv"
+                if any(w in n for w in ["project", "readme", "repo", "code"]):       return "project"
+                if any(w in n for w in ["team", "values", "culture", "collaborat"]): return "values"
+                if any(w in n for w in ["about", "bio", "profile"]):                return "about"
+                return "any"
 
 
-        if st.button(f"✅ Save {len(saved)} file(s) and Re-index", use_container_width=True):
-            with st.spinner("Indexing new documents…"):
-                from rag import chunk, load_texts
-                import faiss, pickle, json, numpy as np
-
-                IDX_DIR = Path("index");
-                IDX_DIR.mkdir(exist_ok=True)
-                meta_fp, idx_fp, rec_fp = IDX_DIR / "meta.json", IDX_DIR / "faiss.index", IDX_DIR / "records.pkl"
-
-                # Rebuild small corpus (now with type)
-                all_records = []
-                for doc_id, text in load_texts(str(data_dir)):
-                    doc_type = infer_type(doc_id)
-                    for c in chunk(text, max_tokens=350, overlap=80):
-                        c = c.strip()
-                        if c:
-                            all_records.append({"doc_id": doc_id, "type": doc_type, "text": c})
+            all_records = []
+            for doc_id, text in load_texts(str(data_dir)):
+                doc_type = infer_type(doc_id)
+                for c in chunk(text, max_tokens=350, overlap=80):
+                    c = c.strip()
+                    if c:
+                        all_records.append({"doc_id": doc_id, "type": doc_type, "text": c})
 
 
-                # Embed & write
-                def _embed(texts):
-                    resp = client.embeddings.create(model=EMBED_MODEL, input=texts)
-                    return [d.embedding for d in resp.data]
+            # embed + write
+            def _embed(texts):
+                resp = client.embeddings.create(model=EMBED_MODEL, input=texts)
+                return [d.embedding for d in resp.data]
 
 
-                vecs, B = [], 64
-                for i0 in range(0, len(all_records), B):
-                    vecs.extend(_embed([r["text"] for r in all_records[i0:i0 + B]]))
-                xb = np.array(vecs, dtype="float32")
-                index = faiss.IndexFlatL2(xb.shape[1]);
-                index.add(xb)
-                faiss.write_index(index, str(idx_fp))
-                with open(rec_fp, "wb") as f:
-                    pickle.dump(all_records, f)
-                with open(meta_fp, "w") as f:
-                    json.dump(
-                        {"embed_model": EMBED_MODEL, "dim": int(xb.shape[1]), "count": len(all_records)},
-                        f, indent=2
-                    )
+            vecs, B = [], 64
+            for i0 in range(0, len(all_records), B):
+                vecs.extend(_embed([r["text"] for r in all_records[i0:i0 + B]]))
+            xb = np.array(vecs, dtype="float32")
+            new_index = faiss.IndexFlatL2(xb.shape[1]);
+            new_index.add(xb)
+            faiss.write_index(new_index, str(idx_fp))
+            with open(rec_fp, "wb") as f:
+                pickle.dump(all_records, f)
+            meta_fp.write_text(
+                json.dumps({"embed_model": EMBED_MODEL, "dim": int(xb.shape[1]), "count": len(all_records)}, indent=2))
 
-            st.success("Re-indexed successfully.");
-            st.rerun()
+            # hot-reload in memory so next query sees the new docs
+            st.session_state["faiss_index"] = new_index
+            st.session_state["faiss_records"] = all_records
 
+        st.success("Docs indexed and loaded!")
+
+    # At load time (top of file, right after you read from disk) prefer session cache:
+    index = st.session_state.get("faiss_index", index)
+    records = st.session_state.get("faiss_records", records)
 
     with st.popover("⚙️ Settings", use_container_width=True):
         st.write(f"**Embed model:** `{EMBED_MODEL}`")
