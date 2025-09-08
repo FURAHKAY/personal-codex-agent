@@ -1,146 +1,80 @@
 # Personal Codex Agent
 
 ## 📌 Overview
-This project is a **trial build for Ubundi**: a context-aware chatbot that answers questions about me as a candidate.  
-It is powered by my personal documents (CV, project READMEs, and reflective notes) and serves as a lightweight first version of my **personal Codex**.
+A context-aware chatbot that answers questions **about me (Furaha)** using my own docs (CV, project READMEs, work-style notes). Retrieval via **OpenAI embeddings + FAISS**, generation via **GPT-4o-mini**, and a Streamlit UI with **modes** (Interview, Storytelling, Fast Facts, Reflective, Humble Brag).
 
-The system uses **retrieval-augmented generation (RAG)** with OpenAI embeddings + FAISS to ground answers in my data, then generates responses in my own voice.
+- **Deployed app**: https://codex-agent.streamlit.app/
+* **Video walkthrough**: https://drive.google.com/file/d/1yA68q3XZ-2JHP4AjI0BoO9zUOmTpt7Cq/view
+- **Architecture diagram:** `artifacts/architecture.png` 
 
-## Features
-- **Retrieval-Augmented Generation (RAG)** with FAISS + OpenAI embeddings
-- **Personal dataset** (`/data/`) including CV, AboutMe, work style notes, and project READMEs
-- **Streamlit UI** for interactive Q&A
-- **Citations**: see which documents/chunks were used
-- **Agentic modes** (optional stretch): interview / storytelling / fast facts / humble-brag
+---
 
+## Quickstart
 
-## Project Structure
-```
-personal-codex-agent/
-│
-├── app.py              # Streamlit UI
-├── build\_index.py      # Splits docs into chunks -> Build embeddings -> stores in FAISS index. 
-├── rag.py              #  Finds top-k relevant chunks for a query.
-├── prompt.py           # System prompt definition
-│
-├── data/               # My personal documents
-│   ├── Furaha kabeya-ML-CV.pdf
-│   ├── AboutMe.md
-│   ├── WorkStyle.txt
-│   ├── README\_DiabetesPredictor.md
-│   └── README\_RL\_Agent.md
-│
-├── index/              # Generated FAISS index + metadata
-│
-├── artifacts/          # "Show Your Thinking" AI build logs
-│   ├── prompts\_used.md
-│   ├── agent\_instructions.md
-│   └── commit\_log.txt
-│
-├── requirements.txt
-└── README.md
-
-````
-## Setup
-
-### Clone the repo
 ```bash
-git clone git@github.com:FURAHKAY/personal-codex-agent.git
+git clone https://github.com/FURAHKAY/personal-codex-agent.git
 cd personal-codex-agent
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 ````
 
-### Create virtual environment
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-set -a; source .env; set +a  
-```
-
-### Environment variables
-
-`.env` file in the project root:
+Create `.env`:
 
 ```env
-OPENAI_API_KEY=your_openai_key_here
-MODEL=gpt-4o-mini
+OPENAI_API_KEY=sk-...
 EMBED_MODEL=text-embedding-3-small
-
+CHAT_MODEL=gpt-4o-mini
 ```
 
-### Build the index
+Build index + run:
 
 ```bash
 python build_index.py
-```
-
-### Run the app
-
-```bash
 streamlit run app.py
 ```
 
 ---
 
-## Design Choices
+## Features
 
-* **RAG (FAISS + OpenAI embeddings)** → ensures answers are grounded in my actual documents.
-* **Chunking with overlap** → balances recall vs relevance.
-* **Streamlit** → quick, interactive UI.
-* **Temperature = 0** → deterministic answers for consistency.
-* **Personal dataset** → blends technical + reflective docs so answers feel authentic.
-
-
-## Example Questions
-
-Here are some queries the agent can answer:
-
-* “What kind of engineer are you?”
-* “What are your strongest technical skills?”
-* “What projects or experiences are you most proud of?”
-* “What do you value in a team or company culture?”
-* “What’s your approach to learning or debugging something new?”
+* **RAG**: FAISS (IndexFlatL2) + `text-embedding-3-small`
+* **Modes**: Interview, Storytelling, Fast Facts, Reflective, Humble Brag
+* **Citations**: inline chips that expand to snippets
+* **Dark theme toggle**
+* **Multi-session history** with export to Markdown
+* **Admin pane**: upload docs → re-index from the UI
 
 ---
 
-## Future Improvements
+## Project Structure
 
-Given more time, I would:
+```
+app.py                  # Streamlit UI + chat loop + retrieval + UX
+build_index.py          # Index builder (embeds → FAISS + metadata)
+rag.py                  # Loading/normalization + chunking
+prompts.py              # System prompt + mode instructions + params
+data/                   # Personal corpus (CV, AboutMe, WorkStyle, READMEs…)
+index/                  # Generated FAISS + metadata (meta.json, records.pkl)
+artifacts/              # Docs: architecture, eval plan, metrics, security, etc.
+```
 
-* Improve grounding with richer metadata and cross-document linking.
-* Incremental indexing (upload new docs from UI).
-* Fine-grained metadata filtering (e.g., “only from CV”).
-* Add **self-reflective agent mode** for growth/values questions.
-
-
-
-## Show Your Thinking
-
-See the `artifacts/` folder for:
-
-* Prompts I used with AI coding agents.
-* How I guided sub-agents (tasks delegated, rules given).
-* Notes on what was AI-generated vs hand-edited.
 ---
 
-## Demo
+## Design Choices (TL;DR)
 
-* **Deployed app**: https://codex-agent.streamlit.app/
-* **Video walkthrough**: https://drive.google.com/file/d/1yA68q3XZ-2JHP4AjI0BoO9zUOmTpt7Cq/view
+* **FAISS** for simplicity + portability (<10k chunks sweet spot).
+* **Chunking** \~350 tokens with 80 overlap (paragraph-aware) for continuity.
+* **Intent filters** (cv/project/values/about) to prefer relevant sources.
+* **Post-processing** enforces mode formatting (bullets/length/tone).
+* **Small-talk guardrails**: friendly, then steer back to work topics.
 
-## Evaluation Mapping
-
-* **Context handling** → FAISS + overlap, retrieved snippets shown
-* **Agentic thinking** → modes scaffolded, expandable
-* **Personal data** → CV + project READMEs + reflective notes
-* **Build quality** → index checks, robust error handling
-* **Voice & reflection** → first-person answers, grounded in my docs
-* **Bonus effort** → citations, mode design, artifacts folder
-* **AI build artifacts** → included in `/artifacts/`
-* **RAG usage** → effective FAISS + OpenAI embedding pipeline
+Full rationale in `artifacts/architecture.md`.
+- Known issues & fixes in `artifacts/troubleshooting.md`
+- Security & Privacy: No PII beyond my documents. Keys via `.env`/Streamlit Secrets, never committed. See `artifacts/security_privacy.md`.
 
 ---
 
 ## Author
+
 Furaha Kabeya
+

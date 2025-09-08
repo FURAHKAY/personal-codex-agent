@@ -36,3 +36,10 @@ I isolate variables, run small experiments, and keep detailed notes for reproduc
 
 ### What energizes you?
 Creative problem-solving, collaborating with motivated peers, and seeing research applied.
+### Tell my about RL
+
+Reinforcement learning (RL) fascinates me because it mirrors how we, as humans, learn through trial and error. In my current studies, I’m diving deep into RL, particularly through projects like my GridWorld Agent, which employs Q-learning and a Transformer variant. This agent learns to navigate an environment by receiving feedback from its actions, allowing it to improve over time. One memorable moment during my exploration was when I implemented a new reward strategy that drastically improved the agent's performance.
+
+It was rewarding to see the agent adapt and make smarter decisions based on the feedback it received. This experience underscored the power of RL in creating intelligent systems that learn autonomously, which aligns perfectly with my goal of building AI solutions that can tackle real-world challenges. This reinforced my belief in building carefully while iterating quickly.
+
+---

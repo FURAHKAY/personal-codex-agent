@@ -1,6 +1,5 @@
 import os, json, pickle, re, uuid, time, datetime
 from pathlib import Path
-
 import faiss
 import numpy as np
 import streamlit as st
@@ -81,26 +80,63 @@ def save_chat(cid: str, session_obj: dict):
 # Page config + light CSS
 # --------------------------
 st.set_page_config(page_title="Personal Codex Agent", page_icon="🗂️", layout="wide")
-st.markdown(
-    """
-    <style>
-      .block-container {max-width: 920px;}
-      .top-menu { position: sticky; top: 0; z-index: 12; background: rgba(255,255,255,0.85);
-                  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 8px 0 12px; }
-      .question-pill { border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 10px;
-                       background: #fff; cursor: pointer; }
-      .question-pill:hover { background: #f8fafc; }
-      .bubble-user, .bubble-assistant { border-radius: 14px; padding: 12px 14px; margin: 8px 0 4px 0;
-                       border: 1px solid rgba(0,0,0,0.06); }
-      .bubble-user { background: #f6f7f9; }
-      .bubble-assistant { background: #fffef7; }
-      .meta-chip { font-size: 12px; color: #6b7280; margin: 2px 0 8px 0; }
-      .sources { font-size: 12px; color: #6b7280; margin-top: 6px; font-style: italic; }
-      .hint { font-size: 12px; color:#6b7280; margin-top: 6px;}
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown("""
+<style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --card: #ffffff;
+      --bubble-user: #f6f7f9;
+      --bubble-assistant: #fffef7;
+    }
+    
+    html.dark, .dark {
+      --bg: #0b1020;
+      --fg: #e5e7eb;
+      --muted: #94a3b8;
+      --card: #0f172a;
+      --bubble-user: rgba(148,163,184,.18);
+      --bubble-assistant: rgba(234,179,8,.12);
+    }
+
+  .block-container {max-width: 920px;}
+  .top-menu { position: sticky; top: 0; z-index: 12; background: rgba(255,255,255,0.85);
+              -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 8px 0 12px; }
+  .question-pill { border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 10px; background:#fff; cursor:pointer; }
+  .question-pill:hover { background:#f8fafc; }
+
+  .bubble-user, .bubble-assistant { border-radius: 14px; padding: 12px 14px; margin: 8px 0 4px;
+                                    border:1px solid rgba(0,0,0,0.06); }
+  .bubble-user { background:#f6f7f9; }
+  .bubble-assistant { background:#fffef7; }
+
+  /* polish */
+  .bubble-assistant, .bubble-user { line-height:1.55; }
+  .bubble-assistant p, .bubble-user p { margin:0 0 8px; }
+  .bubble-assistant ul { margin:6px 0 8px 1.1rem; }
+  .meta-chip { font-size:12px; color:#64748b; letter-spacing:.1px; margin:2px 0 8px; }
+  .chip { display:inline-block; padding:3px 8px; border:1px solid #e5e7eb; border-radius:999px;
+          margin:2px 6px 0 0; background:#f8fafc; font-size:12px }
+
+  /* optional dark-theme hooks */
+  :root { --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --card:#ffffff; }
+  .dark :root, .dark { --bg:#0b1020; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f172a; }
+  .block-container { background:var(--bg); color:var(--fg); }
+  .bubble-user{ background:rgba(148,163,184,.12); }
+  .bubble-assistant{ background:rgba(234,179,8,.08); }
+  .meta-chip{ color:var(--muted); }
+  
+    .block-container { background: var(--bg); color: var(--fg); }
+    .top-menu { background: var(--card); }
+    .bubble-user { background: var(--bubble-user); color: var(--fg); }
+    .bubble-assistant { background: var(--bubble-assistant); color: var(--fg); }
+    .meta-chip { color: var(--muted); }
+    .chat-user, .chat-assistant { color: var(--fg); }
+
+</style>
+""", unsafe_allow_html=True)
+
 
 # --------------------------
 # Env / secrets
@@ -366,6 +402,23 @@ def postprocess_by_mode(text: str, mode: str, query: str = "") -> str:
     # ---------- FALLBACK ----------
     return re.sub(r"\*\*(.*?)\*\*", r"\1", t)
 
+def render_source_chips(ctx_items, turn_key: str):
+    if not ctx_items:
+        return
+    st.write(":small_blue_diamond: Sources")
+    cols = st.columns(min(4, len(ctx_items)))
+    for j, c in enumerate(ctx_items):
+        lab = (lambda doc_id: ("CV" if "cv" in doc_id.lower() else
+                               "WorkStyle" if "workstyle" in doc_id.lower() else
+                               "AboutMe" if "about" in doc_id.lower() else
+                               "TeamValues" if "values" in doc_id.lower() else
+                               Path(doc_id).stem[:12]))(c.get("doc_id","Source"))
+        key = f"chip_{turn_key}_{j}"
+        if cols[j % len(cols)].button(lab, key=key, use_container_width=True):
+            st.session_state[key+"_open"] = not st.session_state.get(key+"_open", False)
+        if st.session_state.get(key+"_open", False):
+            with st.expander(f"{lab} — snippet", expanded=True):
+                st.markdown(f"> {c['text']}")
 
 
 def format_citations(ctx_items):
@@ -569,6 +622,104 @@ with st.sidebar:
                 if st.button(f"[{lab}] {snippet}", key=f"hit_{h['rank']}", use_container_width=True):
                     st.session_state.pending_q = ss_q
                     st.rerun()
+    st.divider(); st.markdown("**Admin**")
+
+    # Theme toggle
+    from streamlit import components
+
+    dark_on = st.toggle("🌙 Dark theme", value=st.session_state.get("dark_theme", False))
+    st.session_state["dark_theme"] = dark_on
+
+    components.v1.html(
+        f"""
+        <script>
+          (function() {{
+            const doc = window.parent?.document || document;
+            const root = doc.documentElement;
+            if (root && root.classList) {{
+              root.classList.toggle('dark', {str(dark_on).lower()});
+            }}
+          }})();
+        </script>
+        """,
+        height=0,
+    )
+
+    # Upload + rebuild index (simple rebuild path; fine for small corpora)
+
+    uploaded = st.file_uploader("Upload new doc(s) (.txt, .md, .pdf)", type=["txt", "md", "pdf"],
+                                accept_multiple_files=True)
+    if uploaded:
+        data_dir = Path("data");
+        data_dir.mkdir(exist_ok=True)
+        saved = []
+        for uf in uploaded:
+            out = data_dir / uf.name
+            out.write_bytes(uf.getbuffer());
+            saved.append(uf.name)
+
+
+        # local infer_type (matches build_index.py)
+        def infer_type(name: str) -> str:
+            n = name.lower()
+            if any(w in n for w in ["cv", "resume", "education", "experience"]): return "cv"
+            if any(w in n for w in ["project", "readme", "repo", "code"]):       return "project"
+            if any(w in n for w in ["team", "values", "culture", "collaborat"]):  return "values"
+            if any(w in n for w in ["about", "bio", "profile"]):                  return "about"
+            return "any"
+
+
+        if st.button(f"✅ Save {len(saved)} file(s) and Re-index", use_container_width=True):
+            with st.spinner("Indexing new documents…"):
+                from rag import chunk, load_texts
+                import faiss, pickle, json, numpy as np
+
+                IDX_DIR = Path("index");
+                IDX_DIR.mkdir(exist_ok=True)
+                meta_fp, idx_fp, rec_fp = IDX_DIR / "meta.json", IDX_DIR / "faiss.index", IDX_DIR / "records.pkl"
+
+                # Rebuild small corpus (now with type)
+                all_records = []
+                for doc_id, text in load_texts(str(data_dir)):
+                    doc_type = infer_type(doc_id)
+                    for c in chunk(text, max_tokens=350, overlap=80):
+                        c = c.strip()
+                        if c:
+                            all_records.append({"doc_id": doc_id, "type": doc_type, "text": c})
+
+
+                # Embed & write
+                def _embed(texts):
+                    resp = client.embeddings.create(model=EMBED_MODEL, input=texts)
+                    return [d.embedding for d in resp.data]
+
+
+                vecs, B = [], 64
+                for i0 in range(0, len(all_records), B):
+                    vecs.extend(_embed([r["text"] for r in all_records[i0:i0 + B]]))
+                xb = np.array(vecs, dtype="float32")
+                index = faiss.IndexFlatL2(xb.shape[1]);
+                index.add(xb)
+                faiss.write_index(index, str(idx_fp))
+                with open(rec_fp, "wb") as f:
+                    pickle.dump(all_records, f)
+                with open(meta_fp, "w") as f:
+                    json.dump(
+                        {"embed_model": EMBED_MODEL, "dim": int(xb.shape[1]), "count": len(all_records)},
+                        f, indent=2
+                    )
+
+            st.success("Re-indexed successfully.");
+            st.rerun()
+
+
+    with st.popover("⚙️ Settings", use_container_width=True):
+        st.write(f"**Embed model:** `{EMBED_MODEL}`")
+        st.write(f"**Chat model:** `{CHAT_MODEL}`")
+        st.write("**Retrieval k:** 4 (default)")
+        st.write("**Mode params:**")
+        for name, p in MODE_PARAMS.items():
+            st.caption(f"- {name}: temp={p.get('temperature')}, max_tokens={p.get('max_tokens')}")
 
 # --------------------------
 # Main: top menu + suggestions
@@ -606,20 +757,29 @@ st.title("Personal Codex Agent")
 # --------------------------
 sess = active_session()
 if not sess["history"]:
-    st.info("👋 Welcome to your Personal Codex. Ask about my skills, projects, values, or work style.")
+    st.markdown("### 👋 Welcome")
+    st.caption("I answer questions about my background, projects, values, and working style — grounded in my own docs.")
 
-    # suggestions row
-    suggested = [
-        "What kind of engineer are you?",
-        "How do you debug new problems?",
-        "What do you value in a team?",
-    ]
-    sc = st.columns(3)
-    for i, q in enumerate(suggested):
-        if sc[i].button(q, key=f"sugg_{i}", use_container_width=True):
-            # store for this turn; we will render the user bubble immediately below
-            st.session_state.pending_q = q
-            st.rerun()
+    mode_examples = {
+        "Interview": ["What kind of engineer are you?","What are your strongest technical skills?","Where have you had the most impact?"],
+        "Storytelling": ["Tell me a short story about a project you’re proud of.","Share a time you overcame a technical roadblock.","What did a teammate teach you recently?"],
+        "Fast Facts": ["TL;DR: my strengths","TL;DR: projects I’ve shipped","TL;DR: research areas"],
+        "Reflective": ["What energizes vs drains me?","How do I learn new areas fast?","Where do I want to grow next?"],
+    }
+
+    tabs = st.tabs(list(mode_examples.keys()))
+    for t, (mode_name, qs) in zip(tabs, mode_examples.items()):
+        with t:
+            st.write("Pick a starter:")
+            cols = st.columns(3)
+            for i, q in enumerate(qs):
+                if cols[i % 3].button(q, key=f"onboard_{mode_name}_{i}", use_container_width=True):
+                    current = active_session()
+                    current["mode"] = mode_name
+                    save_chat(get_chat_id(), current)
+                    st.session_state["pending_q"] = q
+                    st.rerun()
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -640,12 +800,18 @@ for i, turn in enumerate(sess["history"]):
         ac = st.columns([2.5,2.5,2.5,2.5])
         # Cross-mode reframe (Option B)
         with ac[0]:
-
             st.write("")  # spacer
+
         with ac[1]:
             st.write("")  # spacer
+
         with ac[2]:
-            st.write("")  # spacer
+            with st.popover("✏️ Edit question", use_container_width=True):
+                new_q = st.text_input("Edit & resend:", value=turn["q"], key=f"editq_{i}")
+                if st.button("Send", key=f"send_edit_{i}"):
+                    st.session_state["pending_q"] = new_q
+                    st.rerun()
+
         # Insight tracker (Option A)
         with ac[3]:
             if st.button("⭐ Save as Insight", key=f"sv_{i}", use_container_width=True):
@@ -671,8 +837,10 @@ for i, turn in enumerate(sess["history"]):
 # --------------------------
 typed_q = st.chat_input("Ask about me…")
 st.markdown('<div class="hint">⏎ to send · ⇧⏎ for newline</div>', unsafe_allow_html=True)
+st.caption("What I can answer: skills, projects, values, work style, learning & debugging approach — grounded in my docs.")
 
 current_q = st.session_state.get("pending_q", "") or typed_q
+
 chat_mode = active_session().get("mode", "Interview")
 
 if current_q:
@@ -711,8 +879,8 @@ if current_q:
 
                 answer_text = postprocess_by_mode(full, chat_mode, query=current_q)
 
-            if ctx_items:
-                st.markdown(f'<div class="sources">Sources: {format_citations(ctx_items)}</div>', unsafe_allow_html=True)
+            render_source_chips(ctx_items, turn_key=f"{i if 'i' in locals() else 'new'}_{int(time.time())}")
+
 
     # persist
     rename_active_if_first_turn(current_q)
@@ -762,4 +930,16 @@ if sess["history"]:
     filename = (sess["title"] or "chat").replace(" ", "_").replace("/", "_")
     st.download_button("📥 Download Markdown", md, file_name=f"{filename}.md")
 
+
+# SYSTEM_PROMPT = """You are the personal codex of the user.
+# Answer questions about the user's background, projects, skills, values and working style.
+# Ground every answer in the provided context. If unsure, say you don't know.
+# Keep answers grounded, concise, and in the user's voice."""
+#
+# MODES = {
+#     "Interview": "Be concise, professional, evidence-driven. Prefer short paragraphs.",
+#     "Personal storytelling": "Be warm, narrative, reflective. Use first-person voice with brief anecdotes.",
+#     "Fast facts": "Answer as bullet points / TL;DR with crisp facts.",
+#     "Humble brag": "Be confident and energetic, but stay truthful and specific."
+# }
 
