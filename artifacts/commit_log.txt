@@ -46,3 +46,23 @@ This log documents which parts of the project were AI-assisted and which were wr
 - Roughly **60% AI-assisted scaffolding**, **40% manual edits, curation, and refinement**.
 - AI accelerated the boilerplate and structure.
 - My manual input shaped the dataset, ensured correctness, polished the voice, and added reflection — making the agent feel personal and representative of me.
+
+
+# Commit Log — AI vs Manual (Chronological Highlights)
+
+[AI]  init scaffold for rag.py (load_texts, basic chunk)
+[ME]  refine chunking (overlap, PDF newline cleanup, final buffer safety)
+[AI]  build_index.py skeleton (batch embeddings, FAISS index)
+[ME]  add empty-data guard, metadata (embed_model, dim, count), clearer prints
+[AI]  app.py basic Streamlit UI (text input → retrieve → answer)
+[ME]  robust secrets/.env detection, safety mismatches (dim/model), clearer error UX
+[AI]  prompts: initial system prompt & basic modes copy
+[ME]  convert modes → behavioral (params per mode), add postprocess_by_mode()
+[ME]  chat-first UI: st.chat_message(), multi-session chat list, “New chat / Clear chat”
+[AI]  quick “retell answer” idea
+[ME]  implement restyle_last_answer() + buttons; enforce formatting after rewrite
+[ME]  small-talk fallback (is_smalltalk + smalltalk_reply)
+[ME]  suggested-questions in main pane; input stays visible; immediate echo of user msg
+[ME]  polish: timestamps per turn, optional inline citations, download chat as .txt
+
+Split (approx): **60% AI scaffolding / 40% manual edits & product polish**.
